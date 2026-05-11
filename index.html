@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
 <title>Loyverse Stock</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -33,17 +33,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:va
 .app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg)}
 .screen{display:none;flex-direction:column;flex:1;overflow:hidden}
 .screen.active{display:flex}
-.connect-scroll{flex:1;overflow-y:auto;padding:28px 20px;display:flex;flex-direction:column;gap:16px}
+.connect-scroll{flex:1;overflow-y:auto;padding:28px 20px;display:flex;flex-direction:column;gap:14px}
 .connect-icon{width:56px;height:56px;background:var(--blue);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;color:#fff;margin:0 auto}
-.connect-title{font-size:18px;font-weight:600;text-align:center;color:var(--text)}
+.connect-title{font-size:18px;font-weight:600;text-align:center}
 .connect-sub{font-size:13px;color:var(--text2);text-align:center;line-height:1.6}
 label.lbl{font-size:11px;color:var(--text2);font-weight:600;display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.04em}
 input[type=password],input[type=search]{width:100%;padding:11px 13px;border:1px solid var(--border2);border-radius:var(--r);font-size:14px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none}
 input:focus{border-color:var(--blue)}
 .hint{font-size:12px;color:var(--text3);line-height:1.6}
-.err-box{background:var(--red-bg);color:var(--red-text);font-size:12px;padding:10px 13px;border-radius:var(--r);display:none}
+.err-box{background:var(--red-bg);color:var(--red-text);font-size:12px;padding:10px 13px;border-radius:var(--r);display:none;word-break:break-word}
+.log-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px 13px;font-size:11px;color:var(--text2);font-family:monospace;line-height:1.7;max-height:160px;overflow-y:auto;display:none;word-break:break-all}
+.log-ok{color:#3B6D11}.log-err{color:#A32D2D}.log-info{color:#185FA5}
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:8px}
-.topbar-title{font-size:15px;font-weight:600;color:var(--text)}
+.topbar-title{font-size:15px;font-weight:600}
 .topbar-right{display:flex;gap:7px;align-items:center;flex-shrink:0}
 .bottom-nav{display:flex;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 7px;font-size:10px;cursor:pointer;color:var(--text2);border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;transition:color .15s}
@@ -53,7 +55,7 @@ input:focus{border-color:var(--blue)}
 .metrics{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:16px}
 .metric{background:var(--bg2);border-radius:var(--r);padding:11px 13px}
 .metric-label{font-size:11px;color:var(--text2);margin-bottom:3px}
-.metric-value{font-size:22px;font-weight:600;color:var(--text)}
+.metric-value{font-size:22px;font-weight:600}
 .search-wrap{display:flex;gap:8px;margin-bottom:13px;flex-wrap:wrap}
 .search-wrap input{flex:1;min-width:120px}
 select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--r);font-size:12px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none}
@@ -66,11 +68,12 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
 .pbar{width:54px;height:4px;background:var(--bg3);border-radius:9px;overflow:hidden}
 .pbar-fill{height:100%;border-radius:9px}
 .badge{display:inline-flex;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600}
-.ok{background:var(--green-bg);color:var(--green-text)}
-.low{background:var(--amber-bg);color:var(--amber-text)}
-.critical{background:var(--red-bg);color:var(--red-text)}
+.b-ok{background:var(--green-bg);color:var(--green-text)}
+.b-low{background:var(--amber-bg);color:var(--amber-text)}
+.b-critical{background:var(--red-bg);color:var(--red-text)}
 .btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;font-size:13px;border:1px solid var(--border2);border-radius:var(--r);cursor:pointer;background:var(--bg);color:var(--text);font-family:inherit;-webkit-tap-highlight-color:transparent;transition:opacity .1s;white-space:nowrap}
 .btn:active{opacity:.65}
+.btn:disabled{opacity:.5;cursor:not-allowed}
 .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
 .btn.success{background:var(--green);color:#fff;border-color:var(--green)}
 .btn.pill{border-radius:99px;padding:6px 13px;font-size:12px}
@@ -84,7 +87,7 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
 .order-item:last-of-type{border-bottom:none}
 .oi-name{flex:1;font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qty-row{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.qty-btn{width:30px;height:30px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:var(--text);user-select:none;-webkit-tap-highlight-color:transparent}
+.qty-btn{width:30px;height:30px;border:1px solid var(--border2);border-radius:var(--r);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;user-select:none;-webkit-tap-highlight-color:transparent;color:var(--text)}
 .qty-val{font-size:13px;font-weight:600;min-width:24px;text-align:center}
 .order-total{display:flex;justify-content:flex-end;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:13px;gap:8px;align-items:center}
 .cat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--rl);padding:14px;margin-bottom:9px}
@@ -110,19 +113,17 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
   <div class="connect-scroll">
     <div class="connect-icon"><i class="ti ti-building-store"></i></div>
     <div class="connect-title">Loyverse Stock</div>
-    <div class="connect-sub">Controlá tu stock y armá pedidos por categoría directamente desde tu celular.</div>
+    <div class="connect-sub">Controlá tu stock y armá pedidos por categoría.</div>
     <div>
       <label class="lbl">Token de acceso</label>
-      <input type="password" id="token-input" placeholder="Pegá tu Bearer token aquí" />
+      <input type="password" id="token-input" placeholder="Pegá tu Bearer token aquí"/>
     </div>
-    <div class="err-box" id="conn-err"></div>
-    <button class="btn primary full" onclick="conectar()">
+    <button class="btn primary full" id="btn-conectar" onclick="conectar()">
       <i class="ti ti-plug"></i> Conectar con Loyverse
     </button>
-    <div class="hint">
-      Encontralo en <strong>Loyverse → Configuración → Integraciones → API de acceso</strong>.<br><br>
-      El token solo se usa en este navegador y no se guarda en ningún servidor.
-    </div>
+    <div class="log-box" id="log-box"></div>
+    <div class="err-box" id="conn-err"></div>
+    <div class="hint">Encontralo en <strong>Loyverse → Configuración → Integraciones → API de acceso</strong>.</div>
   </div>
 </div>
 
@@ -132,13 +133,13 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
     <span class="topbar-title">Stock</span>
     <div class="topbar-right">
       <select class="store-sel" id="store-sel" onchange="onStoreChange()"></select>
-      <button class="btn icon" onclick="recargar()" title="Actualizar"><i class="ti ti-refresh"></i></button>
+      <button class="btn icon" onclick="recargar()"><i class="ti ti-refresh"></i></button>
     </div>
   </div>
   <div class="scroll-area">
     <div class="metrics" id="metrics"></div>
     <div class="search-wrap">
-      <input type="search" id="search" placeholder="Buscar producto o SKU…" oninput="renderStock()" />
+      <input type="search" id="search" placeholder="Buscar…" oninput="renderStock()"/>
       <select class="sel" id="filter-cat" onchange="renderStock()"><option value="">Categoría</option></select>
       <select class="sel" id="filter-est" onchange="renderStock()">
         <option value="">Estado</option>
@@ -195,23 +196,36 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
 
 </div>
 <script>
-let TOKEN='',allItems=[],allInventory=[],allCategories=[],allStores=[],currentStore='',pedidoActual={};
+let TOKEN='', allItems=[], allInventory=[], allCategories=[], allStores=[], currentStore='', pedidoActual={};
 
-// Proxy CORS para evitar bloqueos del navegador
-const PROXY = 'https://corsproxy.io/?url=';
-const LBASE = 'https://api.loyverse.com/v1.0';
+// ── LOG ────────────────────────────────────────────────────────────────
+const logBox = document.getElementById('log-box');
+function log(msg, type='info') {
+  logBox.style.display = 'block';
+  const d = document.createElement('div');
+  d.className = 'log-'+type;
+  d.textContent = (type==='ok'?'✓ ':type==='err'?'✗ ':'→ ') + msg;
+  logBox.appendChild(d);
+  logBox.scrollTop = logBox.scrollHeight;
+}
+function clearLog(){ logBox.innerHTML=''; logBox.style.display='none'; }
 
+// ── API ────────────────────────────────────────────────────────────────
 async function loyFetch(path) {
-  const target = encodeURIComponent(LBASE + path);
-  const res = await fetch(PROXY + target, {
-    method: 'GET',
-    headers: { 'Authorization': 'Bearer ' + TOKEN }
-  });
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error('HTTP ' + res.status + ': ' + txt.slice(0,120));
+  const url = 'https://api.loyverse.com/v1.0' + path;
+  const hdrs = { 'Authorization': 'Bearer ' + TOKEN };
+  // Intentar directo
+  try {
+    const r = await fetch(url, { headers: hdrs });
+    if (r.ok) return r.json();
+    throw new Error('HTTP ' + r.status);
+  } catch(e) {
+    // Fallback proxy
+    const proxy = 'https://corsproxy.io/?' + encodeURIComponent(url);
+    const r2 = await fetch(proxy, { headers: hdrs });
+    if (!r2.ok) throw new Error('HTTP ' + r2.status);
+    return r2.json();
   }
-  return res.json();
 }
 
 async function fetchAll(path, key, extra='') {
@@ -225,80 +239,121 @@ async function fetchAll(path, key, extra='') {
   return results;
 }
 
-function setStockContent(html) { document.getElementById('stock-list').innerHTML = html; }
-function loadingHtml(msg) { return `<div class="loading-row"><div class="spinner"></div>${msg}</div>`; }
+function setSL(html){ document.getElementById('stock-list').innerHTML = html; }
+function loadHtml(msg){ return `<div class="loading-row"><div class="spinner"></div>${msg}</div>`; }
 
+// ── CONECTAR ───────────────────────────────────────────────────────────
 async function conectar() {
   const t = document.getElementById('token-input').value.trim();
-  if (!t) return;
-  TOKEN = t;
+  const btn = document.getElementById('btn-conectar');
   const err = document.getElementById('conn-err');
+  if (!t) { err.textContent='Ingresá el token primero.'; err.style.display='block'; return; }
+  TOKEN = t;
   err.style.display = 'none';
-  setStockContent(loadingHtml('Conectando…'));
+  clearLog();
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;margin-right:6px"></div>Conectando…';
+  log('Iniciando conexión…');
   try {
     await recargar(true);
   } catch(e) {
     TOKEN = '';
-    err.textContent = 'Error: ' + e.message;
+    log('ERROR: ' + e.message, 'err');
+    err.textContent = e.message;
     err.style.display = 'block';
-    setStockContent('');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-plug"></i> Conectar con Loyverse';
   }
 }
 
 async function recargar(first) {
-  if (!first) setStockContent(loadingHtml('Actualizando…'));
+  if (!first) { clearLog(); setSL(loadHtml('Actualizando…')); }
 
-  setStockContent(loadingHtml('Cargando tiendas…'));
+  log('Cargando tiendas…');
   const sd = await loyFetch('/stores');
   allStores = sd.stores || [];
+  log('Tiendas: ' + allStores.map(s=>s.name).join(', '), 'ok');
 
-  setStockContent(loadingHtml('Cargando categorías…'));
+  log('Cargando categorías…');
   allCategories = await fetchAll('/categories', 'categories');
+  log('Categorías: ' + allCategories.length, 'ok');
 
-  setStockContent(loadingHtml('Cargando productos…'));
+  log('Cargando productos…');
   allItems = await fetchAll('/items', 'items');
+  log('Productos: ' + allItems.length, 'ok');
 
-  setStockContent(loadingHtml('Cargando inventario…'));
+  // Inventario: pedimos todos los store_id juntos en una sola llamada si es posible
+  log('Cargando inventario…');
   allInventory = [];
   for (const s of allStores) {
-    const inv = await fetchAll('/inventory', 'inventory_levels', '?store_id='+s.id);
+    log('Inventario tienda: ' + s.name + ' (id: ' + s.id + ')');
+    const inv = await fetchAll('/inventory', 'inventory_levels', '?store_id=' + s.id);
+    log('  → ' + inv.length + ' registros', 'ok');
+    // DEBUG: mostrar primer registro para ver estructura
+    if (inv.length > 0 && first) {
+      log('  Muestra: ' + JSON.stringify(inv[0]).slice(0,120), 'info');
+    }
     allInventory = allInventory.concat(inv);
   }
+  log('Total inventario: ' + allInventory.length, 'ok');
 
   if (first) {
-    document.getElementById('sc-connect').classList.remove('active');
-    document.getElementById('sc-stock').classList.add('active');
     populateStoreFilter();
     if (!currentStore && allStores.length) currentStore = allStores[0].id;
     document.getElementById('store-sel').value = currentStore;
+    log('Store activo: ' + currentStore, 'info');
   }
+
   renderAll();
+
+  if (first) {
+    setTimeout(() => {
+      document.getElementById('sc-connect').classList.remove('active');
+      document.getElementById('sc-stock').classList.add('active');
+      const btn = document.getElementById('btn-conectar');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-plug"></i> Conectar con Loyverse';
+    }, 1000);
+  }
 }
 
 function desconectar() {
   TOKEN=''; allItems=[]; allInventory=[]; allCategories=[]; allStores=[]; pedidoActual={}; currentStore='';
-  ['sc-stock','sc-pedidos','sc-cats'].forEach(id => document.getElementById(id).classList.remove('active'));
+  clearLog();
+  ['sc-stock','sc-pedidos','sc-cats'].forEach(id=>document.getElementById(id).classList.remove('active'));
   document.getElementById('sc-connect').classList.add('active');
-  document.getElementById('token-input').value = '';
+  document.getElementById('token-input').value='';
+  document.getElementById('conn-err').style.display='none';
 }
 
 function populateStoreFilter() {
-  document.getElementById('store-sel').innerHTML = allStores.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  document.getElementById('store-sel').innerHTML = allStores.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
 }
-function onStoreChange() { currentStore = document.getElementById('store-sel').value; renderAll(); }
+function onStoreChange(){ currentStore=document.getElementById('store-sel').value; renderAll(); }
 
+// ── STOCK HELPERS ──────────────────────────────────────────────────────
 function getStock(vId) {
-  return allInventory.filter(i => i.variant_id===vId && i.store_id===currentStore).reduce((s,i) => s+(i.in_stock||0), 0);
+  // Buscar por variant_id, ignorar store si no hay match exacto
+  const forVariant = allInventory.filter(i => i.variant_id === vId);
+  if (!forVariant.length) return 0;
+  // Si tenemos filtro de tienda activo, intentar filtrar
+  const forStore = forVariant.filter(i => i.store_id === currentStore);
+  // Si no hay match de tienda, sumar todos (puede que store_id venga distinto)
+  const source = forStore.length > 0 ? forStore : forVariant;
+  return source.reduce((s, i) => s + (parseFloat(i.in_stock) || 0), 0);
 }
+
 function getEstado(stock, min) {
   if (stock <= 0) return 'critical';
   if (min > 0 && stock < min) return 'low';
   return 'ok';
 }
 const estadoLabel = e => ({ok:'Normal', low:'Bajo', critical:'Sin stock'}[e]);
+const badgeClass  = e => ({ok:'b-ok', low:'b-low', critical:'b-critical'}[e]);
+
 function getCatName(id) {
   if (!id) return 'Sin categoría';
-  return (allCategories.find(c => c.id===id) || {name:'Sin categoría'}).name;
+  return (allCategories.find(c=>c.id===id) || {name:'Sin categoría'}).name;
 }
 
 function flatItems() {
@@ -309,9 +364,10 @@ function flatItems() {
       const min = v.low_stock || item.low_stock || 0;
       rows.push({
         variantId: v.id,
-        nombre: item.item_name + (v.variant_name && v.variant_name!==item.item_name ? ' — '+v.variant_name : ''),
+        nombre: item.item_name + (v.variant_name && v.variant_name !== item.item_name ? ' — ' + v.variant_name : ''),
         categoryId: item.category_id || null,
-        stock, min, costo: v.cost || 0,
+        stock, min,
+        costo: v.cost || 0,
         estado: getEstado(stock, min),
         sku: v.sku || ''
       });
@@ -320,12 +376,12 @@ function flatItems() {
   return rows;
 }
 
-function renderAll() { renderMetrics(); populateCatFilter(); renderStock(); renderCats(); }
+function renderAll(){ renderMetrics(); populateCatFilter(); renderStock(); renderCats(); }
 
 function renderMetrics() {
   const rows = flatItems();
-  const crit = rows.filter(r => r.estado==='critical').length;
-  const low  = rows.filter(r => r.estado==='low').length;
+  const crit = rows.filter(r=>r.estado==='critical').length;
+  const low  = rows.filter(r=>r.estado==='low').length;
   document.getElementById('metrics').innerHTML = `
     <div class="metric"><div class="metric-label">Productos</div><div class="metric-value">${rows.length}</div></div>
     <div class="metric"><div class="metric-label">Categorías</div><div class="metric-value">${allCategories.length}</div></div>
@@ -334,9 +390,9 @@ function renderMetrics() {
 }
 
 function populateCatFilter() {
-  const sel = document.getElementById('filter-cat'); const cur = sel.value;
+  const sel = document.getElementById('filter-cat'), cur = sel.value;
   sel.innerHTML = '<option value="">Categoría</option>' +
-    allCategories.map(c => `<option value="${c.id}" ${cur===c.id?'selected':''}>${c.name}</option>`).join('');
+    allCategories.map(c=>`<option value="${c.id}" ${cur===c.id?'selected':''}>${c.name}</option>`).join('');
 }
 
 function renderStock() {
@@ -349,11 +405,15 @@ function renderStock() {
     if (fEst && r.estado !== fEst) return false;
     return true;
   });
-  if (!rows.length) { setStockContent('<div class="empty"><i class="ti ti-package"></i>Sin resultados.</div>'); return; }
-  setStockContent(rows.map(r => {
+  if (!rows.length) { setSL('<div class="empty"><i class="ti ti-package"></i>Sin resultados.</div>'); return; }
+
+  const list = document.createElement('div');
+  rows.forEach(r => {
     const pct = Math.min(100, Math.round((r.stock/(r.min*2||Math.max(r.stock,1)))*100));
     const barColor = r.estado==='critical'?'#E24B4A':r.estado==='low'?'#EF9F27':'#639922';
-    return `<div class="prod-card">
+    const card = document.createElement('div');
+    card.className = 'prod-card';
+    card.innerHTML = `
       <div class="prod-info">
         <div class="prod-name">${r.nombre}</div>
         <div class="prod-meta"><i class="ti ti-tag" style="font-size:11px;vertical-align:-1px"></i> ${getCatName(r.categoryId)}${r.sku?' · '+r.sku:''}</div>
@@ -361,113 +421,159 @@ function renderStock() {
       </div>
       <div class="prod-right">
         <div class="stock-num">${r.stock}</div>
-        <span class="badge ${r.estado}">${estadoLabel(r.estado)}</span>
-        <button class="btn pill primary" onclick="agregarAlPedido('${r.variantId}')" style="font-size:11px;padding:5px 11px"><i class="ti ti-plus"></i> Pedir</button>
-      </div>
-    </div>`;
-  }).join(''));
+        <span class="badge ${badgeClass(r.estado)}">${estadoLabel(r.estado)}</span>
+        <button class="btn pill primary pedir-btn" style="font-size:11px;padding:5px 11px">
+          <i class="ti ti-plus"></i> Pedir
+        </button>
+      </div>`;
+    // Usar data attribute + listener en lugar de onclick inline (evita problemas con IDs con guiones/caracteres especiales)
+    card.querySelector('.pedir-btn').addEventListener('click', () => agregarAlPedido(r.variantId));
+    list.appendChild(card);
+  });
+  document.getElementById('stock-list').innerHTML = '';
+  document.getElementById('stock-list').appendChild(list);
 }
 
+// ── PEDIDOS ────────────────────────────────────────────────────────────
 function agregarAlPedido(variantId) {
-  const r = flatItems().find(x => x.variantId===variantId); if (!r) return;
+  const r = flatItems().find(x => x.variantId === variantId);
+  if (!r) return;
   const cid = r.categoryId || '__sin_cat__';
   if (!pedidoActual[cid]) pedidoActual[cid] = {};
-  if (!pedidoActual[cid][variantId]) pedidoActual[cid][variantId] = {row:r, qty:Math.max(1,r.min-r.stock)};
-  else pedidoActual[cid][variantId].qty++;
+  if (!pedidoActual[cid][variantId]) {
+    pedidoActual[cid][variantId] = { row: r, qty: Math.max(1, r.min - r.stock) };
+  } else {
+    pedidoActual[cid][variantId].qty++;
+  }
   goTab('pedidos');
 }
 
 function switchOrderTab(tab) {
   document.getElementById('tab-manual').classList.toggle('active', tab==='manual');
   document.getElementById('tab-sug').classList.toggle('active', tab==='sug');
-  document.getElementById('orders-manual').style.display = tab==='manual' ? 'block' : 'none';
-  document.getElementById('orders-sug').style.display = tab==='sug' ? 'block' : 'none';
+  document.getElementById('orders-manual').style.display = tab==='manual'?'block':'none';
+  document.getElementById('orders-sug').style.display = tab==='sug'?'block':'none';
   tab==='sug' ? renderSugeridos() : renderOrders();
 }
 
 function renderOrders() {
   const container = document.getElementById('orders-manual');
   const cids = Object.keys(pedidoActual);
-  if (!cids.length) { container.innerHTML='<div class="empty"><i class="ti ti-shopping-cart"></i>Sin productos.<br>Desde Stock tocá <strong>Pedir</strong>.</div>'; return; }
-  container.innerHTML = cids.map(cid => {
+  if (!cids.length) {
+    container.innerHTML = '<div class="empty"><i class="ti ti-shopping-cart"></i>Sin productos.<br>Desde Stock tocá <strong>Pedir</strong>.</div>';
+    return;
+  }
+  container.innerHTML = '';
+  cids.forEach(cid => {
     const catName = getCatName(cid==='__sin_cat__' ? null : cid);
     const items = Object.values(pedidoActual[cid]);
-    const total = items.reduce((s,i) => s+i.qty*(i.row.costo||0), 0);
-    const rows = items.map(({row:r, qty}) => `
+    const total = items.reduce((s,i) => s + i.qty*(i.row.costo||0), 0);
+
+    const card = document.createElement('div');
+    card.className = 'order-card';
+
+    const rowsHtml = items.map(({row:r, qty}) => `
       <div class="order-item">
         <div class="oi-name">${r.nombre}</div>
         <div class="qty-row">
-          <div class="qty-btn" onclick="changeQty('${cid}','${r.variantId}',-1)">−</div>
+          <div class="qty-btn" data-cid="${cid}" data-vid="${r.variantId}" data-delta="-1">−</div>
           <div class="qty-val">${qty}</div>
-          <div class="qty-btn" onclick="changeQty('${cid}','${r.variantId}',1)">+</div>
-          <div class="qty-btn" onclick="removeItem('${cid}','${r.variantId}')" style="color:var(--red-text)"><i class="ti ti-trash"></i></div>
+          <div class="qty-btn" data-cid="${cid}" data-vid="${r.variantId}" data-delta="1">+</div>
+          <div class="qty-btn del-btn" data-cid="${cid}" data-vid="${r.variantId}" style="color:var(--red-text)"><i class="ti ti-trash"></i></div>
         </div>
       </div>`).join('');
-    return `<div class="order-card">
+
+    card.innerHTML = `
       <div class="order-header">
         <div>
           <div class="order-name"><i class="ti ti-tag" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${catName}</div>
           <div class="order-sub">${items.length} producto${items.length!==1?'s':''}</div>
         </div>
-        <button class="btn pill success" onclick="exportPDFCat('${cid}')"><i class="ti ti-download"></i> PDF</button>
+        <button class="btn pill success pdf-cat-btn"><i class="ti ti-download"></i> PDF</button>
       </div>
-      ${rows}
-      <div class="order-total"><span style="color:var(--text2)">Total:</span><strong>${total?'$'+total.toLocaleString('es-AR'):'—'}</strong></div>
-    </div>`;
-  }).join('');
+      ${rowsHtml}
+      <div class="order-total"><span style="color:var(--text2)">Total:</span><strong>${total?'$'+total.toLocaleString('es-AR'):'—'}</strong></div>`;
+
+    card.querySelector('.pdf-cat-btn').addEventListener('click', () => exportPDFCat(cid));
+    card.querySelectorAll('.qty-btn:not(.del-btn)').forEach(btn => {
+      btn.addEventListener('click', () => {
+        changeQty(btn.dataset.cid, btn.dataset.vid, parseInt(btn.dataset.delta));
+      });
+    });
+    card.querySelectorAll('.del-btn').forEach(btn => {
+      btn.addEventListener('click', () => removeItem(btn.dataset.cid, btn.dataset.vid));
+    });
+    container.appendChild(card);
+  });
 }
 
 function renderSugeridos() {
-  const bajos = flatItems().filter(r => r.estado!=='ok');
+  const bajos = flatItems().filter(r => r.estado !== 'ok');
   const container = document.getElementById('orders-sug');
-  if (!bajos.length) { container.innerHTML='<div class="empty"><i class="ti ti-circle-check"></i>¡Todo el stock está en nivel normal!</div>'; return; }
+  if (!bajos.length) { container.innerHTML='<div class="empty"><i class="ti ti-circle-check"></i>¡Todo el stock en nivel normal!</div>'; return; }
   const byCat = {};
   bajos.forEach(r => { const k=r.categoryId||'__sin_cat__'; if(!byCat[k]) byCat[k]=[]; byCat[k].push(r); });
-  container.innerHTML = Object.entries(byCat).map(([cid,prods]) => {
-    const catName = getCatName(cid==='__sin_cat__' ? null : cid);
-    const rows = prods.map(r => {
-      const sug = Math.max(1,(r.min||5)*2-r.stock);
-      const sid = 'sug_'+r.variantId.replace(/[^a-z0-9]/gi,'_');
+  container.innerHTML = '';
+  Object.entries(byCat).forEach(([cid, prods]) => {
+    const catName = getCatName(cid==='__sin_cat__'?null:cid);
+    const card = document.createElement('div');
+    card.className = 'order-card';
+    const rowsHtml = prods.map(r => {
+      const sug = Math.max(1, (r.min||5)*2 - r.stock);
+      const sid = 'sug_' + btoa(r.variantId).replace(/[^a-zA-Z0-9]/g,'');
       return `<div class="order-item">
         <div style="flex:1;min-width:0">
           <div class="oi-name">${r.nombre}</div>
           <div style="display:flex;align-items:center;gap:7px;margin-top:3px">
-            <span class="badge ${r.estado}">${estadoLabel(r.estado)}</span>
+            <span class="badge ${badgeClass(r.estado)}">${estadoLabel(r.estado)}</span>
             <span style="font-size:11px;color:var(--text2)">actual: ${r.stock}${r.min?' / mín: '+r.min:''}</span>
           </div>
         </div>
         <div class="qty-row">
-          <div class="qty-btn" onclick="changeSug('${sid}',-1)">−</div>
+          <div class="qty-btn sug-dec" data-sid="${sid}">−</div>
           <div class="qty-val" id="${sid}">${sug}</div>
-          <div class="qty-btn" onclick="changeSug('${sid}',1)">+</div>
+          <div class="qty-btn sug-inc" data-sid="${sid}">+</div>
         </div>
       </div>`;
     }).join('');
-    return `<div class="order-card">
+    card.innerHTML = `
       <div class="order-header">
         <div class="order-name"><i class="ti ti-tag" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${catName}</div>
-        <button class="btn pill primary" onclick="importarSugeridos('${cid}')"><i class="ti ti-check"></i> Agregar</button>
-      </div>${rows}</div>`;
-  }).join('');
+        <button class="btn pill primary imp-btn"><i class="ti ti-check"></i> Agregar</button>
+      </div>${rowsHtml}`;
+    card.querySelectorAll('.sug-dec').forEach(b => b.addEventListener('click',()=>changeSug(b.dataset.sid,-1)));
+    card.querySelectorAll('.sug-inc').forEach(b => b.addEventListener('click',()=>changeSug(b.dataset.sid,1)));
+    card.querySelector('.imp-btn').addEventListener('click', () => importarSugeridos(cid, prods));
+    container.appendChild(card);
+  });
 }
 
-function changeSug(id,delta){ const el=document.getElementById(id); if(el) el.textContent=Math.max(1,parseInt(el.textContent)+delta); }
+function changeSug(sid, delta) {
+  const el = document.getElementById(sid);
+  if (el) el.textContent = Math.max(1, parseInt(el.textContent) + delta);
+}
 
-function importarSugeridos(cid) {
-  const bajos = flatItems().filter(r => r.estado!=='ok' && (r.categoryId||'__sin_cat__')===cid);
+function importarSugeridos(cid, prods) {
   if (!pedidoActual[cid]) pedidoActual[cid] = {};
-  bajos.forEach(r => {
-    const el = document.getElementById('sug_'+r.variantId.replace(/[^a-z0-9]/gi,'_'));
-    pedidoActual[cid][r.variantId] = {row:r, qty:el?Math.max(1,parseInt(el.textContent)||1):1};
+  prods.forEach(r => {
+    const sid = 'sug_' + btoa(r.variantId).replace(/[^a-zA-Z0-9]/g,'');
+    const el = document.getElementById(sid);
+    pedidoActual[cid][r.variantId] = { row:r, qty: el ? Math.max(1, parseInt(el.textContent)||1) : 1 };
   });
   switchOrderTab('manual');
 }
 
-function changeQty(cid,variantId,delta) {
-  if (pedidoActual[cid]?.[variantId]) { pedidoActual[cid][variantId].qty=Math.max(1,pedidoActual[cid][variantId].qty+delta); renderOrders(); }
+function changeQty(cid, variantId, delta) {
+  if (pedidoActual[cid]?.[variantId]) {
+    pedidoActual[cid][variantId].qty = Math.max(1, pedidoActual[cid][variantId].qty + delta);
+    renderOrders();
+  }
 }
-function removeItem(cid,variantId) {
-  if (pedidoActual[cid]) { delete pedidoActual[cid][variantId]; if(!Object.keys(pedidoActual[cid]).length) delete pedidoActual[cid]; }
+function removeItem(cid, variantId) {
+  if (pedidoActual[cid]) {
+    delete pedidoActual[cid][variantId];
+    if (!Object.keys(pedidoActual[cid]).length) delete pedidoActual[cid];
+  }
   renderOrders();
 }
 
@@ -476,14 +582,14 @@ function renderCats() {
   if (!allCategories.length) { el.innerHTML='<div class="empty"><i class="ti ti-tag"></i>Sin categorías.</div>'; return; }
   el.innerHTML = allCategories.map(c => {
     const prods = flatItems().filter(r => r.categoryId===c.id);
-    const crit = prods.filter(r => r.estado==='critical').length;
-    const low  = prods.filter(r => r.estado==='low').length;
+    const crit = prods.filter(r=>r.estado==='critical').length;
+    const low  = prods.filter(r=>r.estado==='low').length;
     return `<div class="cat-card">
       <div class="cat-name">${c.name}</div>
       <div class="cat-badges">
         <span class="count-pill">${prods.length} producto${prods.length!==1?'s':''}</span>
-        ${crit?`<span class="badge critical">${crit} sin stock</span>`:''}
-        ${low?`<span class="badge low">${low} bajo</span>`:''}
+        ${crit?`<span class="badge b-critical">${crit} sin stock</span>`:''}
+        ${low?`<span class="badge b-low">${low} bajo</span>`:''}
       </div>
     </div>`;
   }).join('');
@@ -492,13 +598,17 @@ function renderCats() {
 function goTab(tab) {
   ['stock','pedidos','cats'].forEach(t => {
     document.getElementById('sc-'+t).classList.toggle('active', t===tab);
-    ['nav-','nav2-','nav3-'].forEach(p => { const el=document.getElementById(p+t); if(el) el.classList.toggle('active',t===tab); });
+    ['nav-','nav2-','nav3-'].forEach(p => {
+      const el = document.getElementById(p+t);
+      if (el) el.classList.toggle('active', t===tab);
+    });
   });
   if (tab==='pedidos') renderOrders();
   if (tab==='cats') renderCats();
 }
 
-function pdfHeader(doc,title) {
+// ── PDF ────────────────────────────────────────────────────────────────
+function pdfHeader(doc, title) {
   doc.setFillColor(24,95,165); doc.rect(0,0,210,24,'F');
   doc.setTextColor(255,255,255); doc.setFontSize(14); doc.setFont('helvetica','bold'); doc.text(title,14,14);
   doc.setFontSize(9); doc.setFont('helvetica','normal');
@@ -514,7 +624,7 @@ function pdfFooter(doc) {
     doc.text('Loyverse Stock Manager',14,291);
   }
 }
-function buildTable(doc,items,startY) {
+function buildTable(doc, items, startY) {
   const total = items.reduce((s,i)=>s+i.qty*(i.row.costo||0),0);
   doc.autoTable({
     head:[['Producto','SKU','Cant.','Precio unit.','Subtotal']],
