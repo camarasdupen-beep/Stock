@@ -100,8 +100,6 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
 .loading-row{display:flex;align-items:center;justify-content:center;gap:10px;padding:36px;color:var(--text2);font-size:13px}
 .spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
-.cors-box{background:var(--blue-bg);color:var(--blue-text);font-size:12px;padding:12px 14px;border-radius:var(--r);line-height:1.6;display:none}
-.cors-box strong{display:block;margin-bottom:4px;font-size:13px}
 </style>
 </head>
 <body>
@@ -113,27 +111,11 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
     <div class="connect-icon"><i class="ti ti-building-store"></i></div>
     <div class="connect-title">Loyverse Stock</div>
     <div class="connect-sub">Controlá tu stock y armá pedidos por categoría directamente desde tu celular.</div>
-
     <div>
       <label class="lbl">Token de acceso</label>
       <input type="password" id="token-input" placeholder="Pegá tu Bearer token aquí" />
     </div>
-
     <div class="err-box" id="conn-err"></div>
-
-    <!-- Aviso CORS solo aparece si falla por CORS -->
-    <div class="cors-box" id="cors-box">
-      <strong>⚠️ Bloqueado por CORS</strong>
-      El navegador no permite llamadas directas a api.loyverse.com desde un archivo local.
-      Para usar la app desde el celular necesitás abrirla desde un servidor web, no desde el archivo.<br><br>
-      <strong>Opción rápida: GitHub Pages (gratis)</strong><br>
-      1. Creá una cuenta en github.com<br>
-      2. Creá un repositorio nuevo<br>
-      3. Subí este archivo como <em>index.html</em><br>
-      4. Activá GitHub Pages en Settings → Pages<br>
-      5. Abrí la URL que te da desde el celu
-    </div>
-
     <button class="btn primary full" onclick="conectar()">
       <i class="ti ti-plug"></i> Conectar con Loyverse
     </button>
@@ -215,19 +197,19 @@ select.sel{padding:10px 8px;border:1px solid var(--border2);border-radius:var(--
 <script>
 let TOKEN='',allItems=[],allInventory=[],allCategories=[],allStores=[],currentStore='',pedidoActual={};
 
-// Llamada directa a la API de Loyverse desde el browser
+// Proxy CORS para evitar bloqueos del navegador
+const PROXY = 'https://corsproxy.io/?url=';
+const LBASE = 'https://api.loyverse.com/v1.0';
+
 async function loyFetch(path) {
-  const url = 'https://api.loyverse.com/v1.0' + path;
-  const res = await fetch(url, {
+  const target = encodeURIComponent(LBASE + path);
+  const res = await fetch(PROXY + target, {
     method: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + TOKEN,
-      'Content-Type': 'application/json'
-    }
+    headers: { 'Authorization': 'Bearer ' + TOKEN }
   });
   if (!res.ok) {
     const txt = await res.text();
-    throw new Error('HTTP ' + res.status + ': ' + txt.slice(0, 120));
+    throw new Error('HTTP ' + res.status + ': ' + txt.slice(0,120));
   }
   return res.json();
 }
@@ -251,21 +233,13 @@ async function conectar() {
   if (!t) return;
   TOKEN = t;
   const err = document.getElementById('conn-err');
-  const corsBox = document.getElementById('cors-box');
   err.style.display = 'none';
-  corsBox.style.display = 'none';
   setStockContent(loadingHtml('Conectando…'));
   try {
     await recargar(true);
   } catch(e) {
     TOKEN = '';
-    // Detectar si es error de CORS
-    if (e.message === 'Failed to fetch' || e.message.includes('NetworkError') || e.message.includes('CORS')) {
-      corsBox.style.display = 'block';
-      err.textContent = 'No se pudo conectar: bloqueado por el navegador (CORS). Leé las instrucciones abajo.';
-    } else {
-      err.textContent = 'Error: ' + e.message;
-    }
+    err.textContent = 'Error: ' + e.message;
     err.style.display = 'block';
     setStockContent('');
   }
@@ -273,6 +247,7 @@ async function conectar() {
 
 async function recargar(first) {
   if (!first) setStockContent(loadingHtml('Actualizando…'));
+
   setStockContent(loadingHtml('Cargando tiendas…'));
   const sd = await loyFetch('/stores');
   allStores = sd.stores || [];
