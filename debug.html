@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<title>Stock & Pedidos — Debug</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:monospace;font-size:12px;padding:16px;background:#111;color:#eee;line-height:1.6}
+h2{font-size:14px;margin:16px 0 8px;color:#7DF;font-family:sans-serif}
+pre{background:#1a1a1a;padding:10px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;border:1px solid #333}
+.ok{color:#7FC97F}.er{color:#F97F7F}.warn{color:#F9D47F}
+button{padding:10px 20px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-bottom:16px;font-family:sans-serif}
+button:disabled{opacity:.5}
+#log{margin-top:8px}
+.ln{padding:2px 0}
+</style>
+</head>
+<body>
+<button id="btn" onclick="run()">▶ Correr diagnóstico</button>
+<div id="log"></div>
+
+<script>
+// TOKEN HARDCODEADO TEMPORALMENTE — REEMPLAZAR DESPUÉS
+const TOKEN = 'ea72d0bcfe4a438aad213a106c9aea46';
+
+const logEl = document.getElementById('log');
+function addLog(msg, cls='') {
+  const d = document.createElement('div');
+  d.className = 'ln ' + cls;
+  d.textContent = msg;
+  logEl.appendChild(d);
+  window.scrollTo(0, document.body.scrollHeight);
+}
+function addPre(obj) {
+  const pre = document.createElement('pre');
+  pre.textContent = JSON.stringify(obj, null, 2);
+  logEl.appendChild(pre);
+  window.scrollTo(0, document.body.scrollHeight);
+}
+
+async function apiFetch(path) {
+  const url = 'https://api.loyverse.com/v1.0' + path;
+  const h = { 'Authorization': 'Bearer ' + TOKEN };
+  try {
+    const r = await fetch(url, { headers: h });
+    if (r.ok) return r.json();
+    throw new Error('HTTP ' + r.status);
+  } catch(e) {
+    addLog('  → directo falló (' + e.message + '), usando proxy…', 'warn');
+    const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(url), { headers: h });
+    if (!r2.ok) throw new Error('Proxy error ' + r2.status);
+    return r2.json();
+  }
+}
+
+async function run() {
+  const btn = document.getElementById('btn');
+  btn.disabled = true;
+  logEl.innerHTML = '';
+
+  try {
+    // ── STORES ──────────────────────────────────────────────────────
+    addLog('── STORES ──────────────────────────────────', 'ok');
+    const sd = await apiFetch('/stores');
+    addPre(sd);
+    const storeId = sd.stores?.[0]?.id;
+    addLog('Store ID a usar: ' + storeId, 'ok');
+
+    // ── CATEGORIES ──────────────────────────────────────────────────
+    addLog('── CATEGORIES (primeras 3) ─────────────────', 'ok');
+    const cd = await apiFetch('/categories?limit=3');
+    addPre(cd);
+
+    // ── ITEMS ────────────────────────────────────────────────────────
+    addLog('── ITEMS (primer item completo) ─────────────', 'ok');
+    const id = await apiFetch('/items?limit=1');
+    addPre(id);
+    const firstItem = id.items?.[0];
+    const firstVariantId = firstItem?.variants?.[0]?.id;
+    addLog('category_id del item[0]: "' + firstItem?.category_id + '"', firstItem?.category_id ? 'ok' : 'er');
+    addLog('variant_id del item[0].variants[0]: "' + firstVariantId + '"', firstVariantId ? 'ok' : 'er');
+
+    // ── INVENTORY sin filtro ────────────────────────────────────────
+    addLog('── INVENTORY sin filtro (primeros 3) ────────', 'ok');
+    const inv1 = await apiFetch('/inventory?limit=3');
+    addPre(inv1);
+
+    // ── INVENTORY con store_id ──────────────────────────────────────
+    if (storeId) {
+      addLog('── INVENTORY con store_id=' + storeId + ' (primeros 3) ──', 'ok');
+      const inv2 = await apiFetch('/inventory?store_id=' + storeId + '&limit=3');
+      addPre(inv2);
+    }
+
+    // ── INVENTORY para variant específica ───────────────────────────
+    if (firstVariantId) {
+      addLog('── INVENTORY para variant_id=' + firstVariantId + ' ──', 'ok');
+      const inv3 = await apiFetch('/inventory?variant_ids=' + firstVariantId);
+      addPre(inv3);
+    }
+
+    // ── CROSS-CHECK ─────────────────────────────────────────────────
+    addLog('── CROSS-CHECK ─────────────────────────────', 'ok');
+    const allInv = await apiFetch('/inventory?limit=250');
+    addLog('Total registros en /inventory?limit=250: ' + (allInv.inventory_levels?.length ?? 0), 'ok');
+    if (firstVariantId) {
+      const match = (allInv.inventory_levels || []).find(i => i.variant_id === firstVariantId);
+      if (match) {
+        addLog('✓ Match encontrado para variant_id "' + firstVariantId + '":', 'ok');
+        addPre(match);
+      } else {
+        addLog('✗ NO hay match para variant_id "' + firstVariantId + '" en los primeros 250 registros de inventario', 'er');
+        addLog('  Primeros 3 variant_ids en inventory:', 'warn');
+        (allInv.inventory_levels || []).slice(0,3).forEach(i => addLog('  · ' + i.variant_id, 'warn'));
+      }
+    }
+
+    addLog('══ DIAGNÓSTICO COMPLETO ══', 'ok');
+
+  } catch(e) {
+    addLog('ERROR: ' + e.message, 'er');
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
