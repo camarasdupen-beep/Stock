@@ -3,42 +3,203 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
-<title>Stock & Pedidos — Debug</title>
+<title>Stock & Pedidos</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:monospace;font-size:12px;padding:16px;background:#111;color:#eee;line-height:1.6}
-h2{font-size:14px;margin:16px 0 8px;color:#7DF;font-family:sans-serif}
-pre{background:#1a1a1a;padding:10px;border-radius:6px;overflow-x:auto;white-space:pre-wrap;word-break:break-all;border:1px solid #333}
-.ok{color:#7FC97F}.er{color:#F97F7F}.warn{color:#F9D47F}
-button{padding:10px 20px;background:#185FA5;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-bottom:16px;font-family:sans-serif}
-button:disabled{opacity:.5}
-#log{margin-top:8px}
-.ln{padding:2px 0}
+:root{
+  --bg:#fff;--bg2:#f5f5f3;--bg3:#eeede9;
+  --text:#1a1a18;--text2:#6b6b68;--text3:#9b9b97;
+  --border:rgba(0,0,0,0.10);--border2:rgba(0,0,0,0.20);
+  --blue:#185FA5;--green:#3B6D11;
+  --green-bg:#EAF3DE;--green-text:#27500A;
+  --amber-bg:#FAEEDA;--amber-text:#854F0B;
+  --red-bg:#FCEBEB;--red-text:#A32D2D;
+  --r:10px;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#1c1c1a;--bg2:#252523;--bg3:#2e2e2b;
+  --text:#f0efe9;--text2:#9b9b97;--text3:#6b6b68;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.18);
+  --green-bg:#1a3308;--green-text:#97C459;
+  --amber-bg:#2e1e04;--amber-text:#EF9F27;
+  --red-bg:#2e0d0d;--red-text:#F09595;
+}}
+html,body{height:100%;background:var(--bg)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);font-size:14px}
+.app{max-width:480px;margin:0 auto;min-height:100dvh;display:flex;flex-direction:column;background:var(--bg)}
+.page{display:none;flex-direction:column;flex:1;min-height:100dvh}
+.page.on{display:flex}
+.tb{display:flex;align-items:center;padding:0 8px;height:52px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg);gap:4px;position:sticky;top:0;z-index:10}
+.tb-t{font-size:16px;font-weight:600;flex:1;padding:0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ib{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r);border:none;background:none;cursor:pointer;color:var(--text);font-size:22px;-webkit-tap-highlight-color:transparent;flex-shrink:0}
+.ib:active{background:var(--bg2)}
+.bn{display:flex;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);position:sticky;bottom:0}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;font-size:10px;font-weight:500;cursor:pointer;color:var(--text2);border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;position:relative}
+.nb i{font-size:22px}.nb.on{color:var(--blue)}
+.cc{position:absolute;top:3px;right:2px;min-width:16px;height:16px;background:var(--blue);color:#fff;border-radius:99px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 3px}
+.sc{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.pad{padding:12px 14px}
+/* connect */
+.cw{padding:32px 20px;display:flex;flex-direction:column;gap:16px}
+.clogo{width:60px;height:60px;background:var(--blue);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto}
+h1{font-size:20px;font-weight:700;text-align:center;color:var(--text)}
+.sub{font-size:13px;color:var(--text2);text-align:center;line-height:1.6}
+.lbl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+input[type=password]{width:100%;padding:13px 14px;border:1.5px solid var(--border2);border-radius:var(--r);font-size:15px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none}
+input[type=password]:focus{border-color:var(--blue)}
+.hint{font-size:12px;color:var(--text3);line-height:1.6;text-align:center}
+.errbox{background:var(--red-bg);color:var(--red-text);font-size:12px;padding:10px 13px;border-radius:var(--r);display:none}
+.logbox{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;font-family:monospace;max-height:140px;overflow-y:auto;display:none;color:var(--text2);line-height:1.7;word-break:break-all}
+.logbox .ok{color:var(--green-text)}.logbox .er{color:var(--red-text)}.logbox .in{color:#185FA5}
+.btnp{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:var(--r);background:var(--blue);color:#fff;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.btnp:disabled{opacity:.5}
+.btns{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.btns:active{opacity:.75}.bg{background:var(--green);color:#fff}
+/* badges */
+.badge{display:inline-flex;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600}
+.bok{background:var(--green-bg);color:var(--green-text)}
+.blow{background:var(--amber-bg);color:var(--amber-text)}
+.bcrit{background:var(--red-bg);color:var(--red-text)}
+/* cat rows */
+.cr{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent;gap:12px}
+.cr:active{background:var(--bg2)}
+.ci{width:40px;height:40px;border-radius:var(--r);background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+.cn{flex:1;min-width:0}
+.cn-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cn-sub{font-size:12px;color:var(--text2);margin-top:2px}
+.cn-b{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+/* product rows */
+.pr{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px}
+.pm{flex:1;min-width:0}
+.pname{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.psku{font-size:11px;color:var(--text3);margin-top:1px}
+.pst{display:flex;align-items:center;gap:8px;margin-top:5px}
+.snum{font-size:14px;font-weight:700}
+.pb{width:48px;height:3px;background:var(--bg3);border-radius:9px;overflow:hidden;display:inline-block;vertical-align:middle}
+.pbf{height:100%;border-radius:9px;display:block}
+/* qty */
+.qc{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qb{width:34px;height:34px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--text);-webkit-tap-highlight-color:transparent;user-select:none;flex-shrink:0}
+.qb:active{background:var(--bg3)}
+.qb.add{background:var(--blue);color:#fff;border-color:var(--blue)}
+.qnum{min-width:26px;text-align:center;font-size:15px;font-weight:700;color:var(--text)}
+/* pedido */
+.pc{margin-bottom:14px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.ph{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg2);gap:8px}
+.phn{font-size:14px;font-weight:600}
+.prow{display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);gap:10px}
+.prn{flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prq{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.ptot{display:flex;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--border);font-size:13px;gap:6px;background:var(--bg2)}
+/* misc */
+.empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:13px;line-height:1.7}
+.empty i{font-size:36px;display:block;margin:0 auto 12px;color:var(--text3)}
+.ldg{display:flex;align-items:center;justify-content:center;gap:10px;padding:48px;color:var(--text2);font-size:13px}
+.spin{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.ss{padding:6px 10px;border:1px solid var(--border2);border-radius:99px;font-size:12px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none;max-width:130px}
 </style>
 </head>
 <body>
-<button id="btn" onclick="run()">▶ Correr diagnóstico</button>
-<div id="log"></div>
+<div class="app">
 
+<!-- CONNECT -->
+<div class="page on" id="p-con">
+  <div class="sc"><div class="cw">
+    <div class="clogo"><i class="ti ti-building-store"></i></div>
+    <h1>Stock & Pedidos</h1>
+    <div class="sub">Conectate a Loyverse para ver stock por proveedor y armar pedidos.</div>
+    <div><div class="lbl">Token de acceso</div>
+      <input type="password" id="tok" placeholder="Pegá tu Bearer token…"/>
+    </div>
+    <button class="btnp" id="btncon" onclick="doConnect()"><i class="ti ti-plug"></i> Conectar</button>
+    <div class="logbox" id="logbox"></div>
+    <div class="errbox" id="errbox"></div>
+    <div class="hint">Loyverse → Configuración → Integraciones → API de acceso</div>
+  </div></div>
+</div>
+
+<!-- PROVEEDORES -->
+<div class="page" id="p-cats">
+  <div class="tb">
+    <span class="tb-t">Proveedores</span>
+    <select class="ss" id="ss" onchange="onStore()"></select>
+    <button class="ib" onclick="doReload()"><i class="ti ti-refresh"></i></button>
+  </div>
+  <div class="sc" id="cats-sc"></div>
+  <div class="bn">
+    <button class="nb on" id="nb-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
+    <button class="nb" id="nb-ped" onclick="goPage('ped')">
+      <i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc1"></span>
+    </button>
+    <button class="nb" onclick="doLogout()"><i class="ti ti-logout"></i>Salir</button>
+  </div>
+</div>
+
+<!-- PRODUCTOS -->
+<div class="page" id="p-prods">
+  <div class="tb">
+    <button class="ib" onclick="goPage('cats')"><i class="ti ti-arrow-left"></i></button>
+    <span class="tb-t" id="prod-title"></span>
+    <button class="ib" onclick="addSugeridos()" title="Agregar sugeridos"><i class="ti ti-sparkles"></i></button>
+  </div>
+  <div class="sc" id="prods-sc"></div>
+</div>
+
+<!-- PEDIDO -->
+<div class="page" id="p-ped">
+  <div class="tb">
+    <span class="tb-t">Pedido</span>
+    <button class="ib" onclick="pdfAll()"><i class="ti ti-download"></i></button>
+  </div>
+  <div class="sc pad" id="ped-sc"></div>
+  <div class="bn">
+    <button class="nb" id="nb2-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
+    <button class="nb on" id="nb2-ped" onclick="goPage('ped')">
+      <i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc2"></span>
+    </button>
+    <button class="nb" onclick="doLogout()"><i class="ti ti-logout"></i>Salir</button>
+  </div>
+</div>
+
+</div>
 <script>
-// TOKEN HARDCODEADO TEMPORALMENTE — REEMPLAZAR DESPUÉS
-const TOKEN = 'ea72d0bcfe4a438aad213a106c9aea46';
+// ══════════════════════════════════════════════════════════════════════
+// DATOS REALES DE LOYVERSE (del diagnóstico):
+// - variants[i].variant_id  (NO .id)
+// - variants[i].stores[j].low_stock
+// - variants[i].stores[j].store_id
+// - inventory: { variant_id, store_id, in_stock }
+// ══════════════════════════════════════════════════════════════════════
 
-const logEl = document.getElementById('log');
-function addLog(msg, cls='') {
+let TOKEN = '';
+let ITEMS = [];
+let CATS  = [];
+let STORE = '';   // id de tienda activa
+let CAT   = '';   // id de categoría abierta
+
+// INV: mapa plano { variant_id → in_stock }
+let INV = {};
+
+// PEDIDO: { variant_id → qty }  — PLANO, sin anidamiento
+let PEDIDO = {};
+
+// ── LOG ────────────────────────────────────────────────────────────────
+const logEl = document.getElementById('logbox');
+function log(msg, t='in') {
+  logEl.style.display = 'block';
   const d = document.createElement('div');
-  d.className = 'ln ' + cls;
-  d.textContent = msg;
+  d.className = t;
+  d.textContent = (t==='ok'?'✓ ':t==='er'?'✗ ':'→ ') + msg;
   logEl.appendChild(d);
-  window.scrollTo(0, document.body.scrollHeight);
+  logEl.scrollTop = logEl.scrollHeight;
 }
-function addPre(obj) {
-  const pre = document.createElement('pre');
-  pre.textContent = JSON.stringify(obj, null, 2);
-  logEl.appendChild(pre);
-  window.scrollTo(0, document.body.scrollHeight);
-}
+function clearLog() { logEl.innerHTML=''; logEl.style.display='none'; }
 
+// ── API ────────────────────────────────────────────────────────────────
 async function apiFetch(path) {
   const url = 'https://api.loyverse.com/v1.0' + path;
   const h = { 'Authorization': 'Bearer ' + TOKEN };
@@ -47,81 +208,498 @@ async function apiFetch(path) {
     if (r.ok) return r.json();
     throw new Error('HTTP ' + r.status);
   } catch(e) {
-    addLog('  → directo falló (' + e.message + '), usando proxy…', 'warn');
     const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(url), { headers: h });
-    if (!r2.ok) throw new Error('Proxy error ' + r2.status);
+    if (!r2.ok) throw new Error('Error ' + r2.status);
     return r2.json();
   }
 }
 
-async function run() {
-  const btn = document.getElementById('btn');
+async function apiAll(path, key, extra='') {
+  let out = [], cursor = null;
+  do {
+    const sep = extra.includes('?') ? '&' : '?';
+    const d = await apiFetch(path + extra + (cursor ? sep+'cursor='+cursor : ''));
+    out = out.concat(d[key] || []);
+    cursor = d.cursor || null;
+  } while(cursor);
+  return out;
+}
+
+// ── CONNECT ────────────────────────────────────────────────────────────
+async function doConnect() {
+  const t = document.getElementById('tok').value.trim();
+  const btn = document.getElementById('btncon');
+  const err = document.getElementById('errbox');
+  if (!t) { err.textContent='Ingresá el token.'; err.style.display='block'; return; }
+  TOKEN = t;
+  err.style.display = 'none';
+  clearLog();
   btn.disabled = true;
-  logEl.innerHTML = '';
-
+  btn.innerHTML = '<div class="spin" style="width:18px;height:18px;border-width:2px"></div> Conectando…';
   try {
-    // ── STORES ──────────────────────────────────────────────────────
-    addLog('── STORES ──────────────────────────────────', 'ok');
-    const sd = await apiFetch('/stores');
-    addPre(sd);
-    const storeId = sd.stores?.[0]?.id;
-    addLog('Store ID a usar: ' + storeId, 'ok');
-
-    // ── CATEGORIES ──────────────────────────────────────────────────
-    addLog('── CATEGORIES (primeras 3) ─────────────────', 'ok');
-    const cd = await apiFetch('/categories?limit=3');
-    addPre(cd);
-
-    // ── ITEMS ────────────────────────────────────────────────────────
-    addLog('── ITEMS (primer item completo) ─────────────', 'ok');
-    const id = await apiFetch('/items?limit=1');
-    addPre(id);
-    const firstItem = id.items?.[0];
-    const firstVariantId = firstItem?.variants?.[0]?.id;
-    addLog('category_id del item[0]: "' + firstItem?.category_id + '"', firstItem?.category_id ? 'ok' : 'er');
-    addLog('variant_id del item[0].variants[0]: "' + firstVariantId + '"', firstVariantId ? 'ok' : 'er');
-
-    // ── INVENTORY sin filtro ────────────────────────────────────────
-    addLog('── INVENTORY sin filtro (primeros 3) ────────', 'ok');
-    const inv1 = await apiFetch('/inventory?limit=3');
-    addPre(inv1);
-
-    // ── INVENTORY con store_id ──────────────────────────────────────
-    if (storeId) {
-      addLog('── INVENTORY con store_id=' + storeId + ' (primeros 3) ──', 'ok');
-      const inv2 = await apiFetch('/inventory?store_id=' + storeId + '&limit=3');
-      addPre(inv2);
-    }
-
-    // ── INVENTORY para variant específica ───────────────────────────
-    if (firstVariantId) {
-      addLog('── INVENTORY para variant_id=' + firstVariantId + ' ──', 'ok');
-      const inv3 = await apiFetch('/inventory?variant_ids=' + firstVariantId);
-      addPre(inv3);
-    }
-
-    // ── CROSS-CHECK ─────────────────────────────────────────────────
-    addLog('── CROSS-CHECK ─────────────────────────────', 'ok');
-    const allInv = await apiFetch('/inventory?limit=250');
-    addLog('Total registros en /inventory?limit=250: ' + (allInv.inventory_levels?.length ?? 0), 'ok');
-    if (firstVariantId) {
-      const match = (allInv.inventory_levels || []).find(i => i.variant_id === firstVariantId);
-      if (match) {
-        addLog('✓ Match encontrado para variant_id "' + firstVariantId + '":', 'ok');
-        addPre(match);
-      } else {
-        addLog('✗ NO hay match para variant_id "' + firstVariantId + '" en los primeros 250 registros de inventario', 'er');
-        addLog('  Primeros 3 variant_ids en inventory:', 'warn');
-        (allInv.inventory_levels || []).slice(0,3).forEach(i => addLog('  · ' + i.variant_id, 'warn'));
-      }
-    }
-
-    addLog('══ DIAGNÓSTICO COMPLETO ══', 'ok');
-
+    await loadAll();
+    goPage('cats');
   } catch(e) {
-    addLog('ERROR: ' + e.message, 'er');
+    TOKEN = '';
+    log('ERROR: ' + e.message, 'er');
+    err.textContent = e.message;
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-plug"></i> Conectar';
   }
-  btn.disabled = false;
+}
+
+async function loadAll() {
+  log('Tiendas…');
+  const sd = await apiFetch('/stores');
+  const stores = sd.stores || [];
+  STORE = stores[0]?.id || '';
+  const sel = document.getElementById('ss');
+  sel.innerHTML = stores.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  sel.value = STORE;
+  log('Tienda: ' + stores[0]?.name, 'ok');
+
+  log('Categorías…');
+  CATS = await apiAll('/categories', 'categories');
+  log('Categorías: ' + CATS.length, 'ok');
+
+  log('Productos…');
+  ITEMS = await apiAll('/items', 'items');
+  log('Productos: ' + ITEMS.length, 'ok');
+
+  log('Inventario…');
+  const rawInv = await apiAll('/inventory', 'inventory_levels');
+  log('Inventario: ' + rawInv.length + ' registros', 'ok');
+
+  // Construir índice INV: variant_id → in_stock para la tienda activa
+  // CLAVE: usar r.variant_id (confirmado por diagnóstico)
+  INV = {};
+  const byVariant = {};
+  rawInv.forEach(r => {
+    if (!byVariant[r.variant_id]) byVariant[r.variant_id] = [];
+    byVariant[r.variant_id].push(r);
+  });
+  Object.entries(byVariant).forEach(([vid, records]) => {
+    const forStore = records.filter(r => r.store_id === STORE);
+    const src = forStore.length ? forStore : records;
+    INV[vid] = src.reduce((s, r) => s + (parseFloat(r.in_stock) || 0), 0);
+  });
+
+  log('Índice INV construido: ' + Object.keys(INV).length + ' variantes', 'ok');
+}
+
+async function doReload() {
+  document.getElementById('cats-sc').innerHTML = '<div class="ldg"><div class="spin"></div>Actualizando…</div>';
+  PEDIDO = {};
+  updateBadge();
+  try { await loadAll(); renderCats(); }
+  catch(e) { document.getElementById('cats-sc').innerHTML = '<div class="empty"><i class="ti ti-alert-circle"></i>' + e.message + '</div>'; }
+}
+
+async function onStore() {
+  STORE = document.getElementById('ss').value;
+  // Reconstruir INV para nueva tienda
+  document.getElementById('cats-sc').innerHTML = '<div class="ldg"><div class="spin"></div>Cambiando tienda…</div>';
+  try { await loadAll(); renderCats(); }
+  catch(e) {}
+}
+
+function doLogout() {
+  TOKEN=''; ITEMS=[]; CATS=[]; INV={}; PEDIDO={}; STORE=''; CAT='';
+  clearLog();
+  document.getElementById('tok').value='';
+  document.getElementById('errbox').style.display='none';
+  goPage('con');
+}
+
+// ── HELPERS ────────────────────────────────────────────────────────────
+// CLAVE: el campo es variant_id, no id
+function getVarId(v) { return v.variant_id; }
+
+function getStock(vid) {
+  return INV[vid] !== undefined ? INV[vid] : null;
+}
+
+function getLowStock(v) {
+  // low_stock está en variant.stores[], no en raíz
+  const storeData = (v.stores || []).find(s => s.store_id === STORE);
+  return storeData?.low_stock || v.low_stock || 0;
+}
+
+function getEstado(vid, min) {
+  const s = getStock(vid);
+  if (s === null) return 'ok';
+  if (s <= 0) return 'crit';
+  if (min > 0 && s < min) return 'low';
+  return 'ok';
+}
+
+const eLabel = e => ({ ok:'Normal', low:'Bajo', crit:'Sin stock' }[e]);
+const eBadge = e => ({ ok:'bok', low:'blow', crit:'bcrit' }[e]);
+
+function catLabel(id) {
+  return (CATS.find(c => c.id === id) || { name: 'Sin categoría' }).name;
+}
+
+// Variantes de una categoría
+function varsByCat(catId) {
+  const out = [];
+  ITEMS
+    .filter(item => item.category_id === catId)
+    .forEach(item => {
+      (item.variants || []).forEach(v => {
+        const vid = getVarId(v);        // variant_id (campo correcto)
+        const min = getLowStock(v);
+        const stock = getStock(vid);
+        out.push({
+          vid,
+          nombre: item.item_name + (v.option1_value ? ' — '+v.option1_value : ''),
+          sku:    v.sku || '',
+          costo:  v.cost || 0,
+          min,
+          stock,
+          est:    getEstado(vid, min),
+        });
+      });
+    });
+  return out;
+}
+
+// Buscar datos de variante por vid
+function varById(vid) {
+  for (const item of ITEMS) {
+    const v = (item.variants || []).find(x => getVarId(x) === vid);
+    if (v) return {
+      vid,
+      nombre: item.item_name + (v.option1_value ? ' — '+v.option1_value : ''),
+      sku:    v.sku || '',
+      costo:  v.cost || 0,
+      catId:  item.category_id || '',
+    };
+  }
+  return null;
+}
+
+function totalUnits() {
+  return Object.values(PEDIDO).reduce((s, q) => s + q, 0);
+}
+
+function updateBadge() {
+  const t = totalUnits();
+  ['cc1','cc2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = t;
+    el.style.display = t > 0 ? 'flex' : 'none';
+  });
+}
+
+// ── NAVEGACIÓN ─────────────────────────────────────────────────────────
+function goPage(name) {
+  ['con','cats','prods','ped'].forEach(n => {
+    document.getElementById('p-'+n).classList.remove('on');
+  });
+  document.getElementById('p-'+name).classList.add('on');
+
+  // Nav active
+  ['nb-cats','nb-ped','nb2-cats','nb2-ped'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('on');
+  });
+  if (name === 'cats') {
+    document.getElementById('nb-cats')?.classList.add('on');
+    document.getElementById('nb2-cats')?.classList.add('on');
+    renderCats();
+  }
+  if (name === 'ped') {
+    document.getElementById('nb-ped')?.classList.add('on');
+    document.getElementById('nb2-ped')?.classList.add('on');
+    renderPedido();
+  }
+  if (name === 'prods') {
+    renderProds();
+  }
+}
+
+// ── RENDER CATS ────────────────────────────────────────────────────────
+function renderCats() {
+  const el = document.getElementById('cats-sc');
+  el.innerHTML = '';
+
+  const sorted = [...CATS].sort((a,b) => a.name.localeCompare(b.name));
+  let shown = 0;
+
+  sorted.forEach(cat => {
+    const vars = varsByCat(cat.id);
+    if (!vars.length) return;
+    shown++;
+
+    const crit  = vars.filter(v => v.est === 'crit').length;
+    const low   = vars.filter(v => v.est === 'low').length;
+    const inPed = vars.reduce((s, v) => s + (PEDIDO[v.vid] || 0), 0);
+
+    const div = document.createElement('div');
+    div.className = 'cr';
+    div.innerHTML = `
+      <div class="ci"><i class="ti ti-tag"></i></div>
+      <div class="cn">
+        <div class="cn-name">${cat.name}</div>
+        <div class="cn-sub">${vars.length} producto${vars.length!==1?'s':''}</div>
+        <div class="cn-b">
+          ${crit  ? `<span class="badge bcrit">${crit} sin stock</span>` : ''}
+          ${low   ? `<span class="badge blow">${low} bajo</span>` : ''}
+          ${inPed ? `<span class="badge bok">${inPed} en pedido</span>` : ''}
+        </div>
+      </div>
+      <i class="ti ti-chevron-right" style="color:var(--text3);font-size:18px;flex-shrink:0"></i>`;
+    div.onclick = () => {
+      CAT = cat.id;
+      document.getElementById('prod-title').textContent = cat.name;
+      goPage('prods');
+    };
+    el.appendChild(div);
+  });
+
+  if (!shown) {
+    el.innerHTML = `<div class="empty"><i class="ti ti-package"></i>
+      Ningún producto tiene categoría asignada en Loyverse.<br><br>
+      En Loyverse, editá los productos y asignales una categoría (que son tus proveedores).
+    </div>`;
+  }
+}
+
+// ── RENDER PRODS ───────────────────────────────────────────────────────
+function renderProds() {
+  const el = document.getElementById('prods-sc');
+  el.innerHTML = '';
+
+  const vars = varsByCat(CAT);
+  if (!vars.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-package"></i>Sin productos en esta categoría.</div>';
+    return;
+  }
+
+  vars.forEach(v => {
+    const barColor = v.est==='crit'?'#E24B4A':v.est==='low'?'#EF9F27':'#639922';
+    const pct = v.stock > 0 ? (v.min ? Math.min(100, Math.round(v.stock/(v.min*2)*100)) : 60) : 0;
+    const stTxt = v.stock === null ? '—' : v.stock;
+    const qty = PEDIDO[v.vid] || 0;
+
+    const row = document.createElement('div');
+    row.className = 'pr';
+    row.innerHTML = `
+      <div class="pm">
+        <div class="pname">${v.nombre}</div>
+        ${v.sku ? `<div class="psku">SKU: ${v.sku}</div>` : ''}
+        <div class="pst">
+          <span class="snum">${stTxt}</span>
+          <span class="badge ${eBadge(v.est)}">${eLabel(v.est)}</span>
+          <span class="pb"><span class="pbf" style="width:${pct}%;background:${barColor}"></span></span>
+        </div>
+      </div>
+      <div class="qc">
+        <div class="qb minus">−</div>
+        <div class="qnum">${qty || ''}</div>
+        <div class="qb add">+</div>
+      </div>`;
+
+    const vid     = v.vid;  // string primitivo, capturado por valor
+    const minusEl = row.querySelector('.minus');
+    const plusEl  = row.querySelector('.add');
+    const qnumEl  = row.querySelector('.qnum');
+
+    function syncMinus() {
+      const q = PEDIDO[vid] || 0;
+      minusEl.style.opacity = q > 0 ? '1' : '.3';
+      minusEl.style.pointerEvents = q > 0 ? 'auto' : 'none';
+    }
+    syncMinus();
+
+    plusEl.onclick = () => {
+      PEDIDO[vid] = (PEDIDO[vid] || 0) + 1;
+      qnumEl.textContent = PEDIDO[vid];
+      syncMinus();
+      updateBadge();
+    };
+
+    minusEl.onclick = () => {
+      if (!PEDIDO[vid] || PEDIDO[vid] <= 0) return;
+      PEDIDO[vid]--;
+      if (PEDIDO[vid] === 0) delete PEDIDO[vid];
+      qnumEl.textContent = PEDIDO[vid] || '';
+      syncMinus();
+      updateBadge();
+    };
+
+    el.appendChild(row);
+  });
+}
+
+function addSugeridos() {
+  const vars = varsByCat(CAT).filter(v => v.est !== 'ok');
+  if (!vars.length) { alert('No hay productos con stock bajo o sin stock en esta categoría.'); return; }
+  vars.forEach(v => {
+    const sug = Math.max(1, (v.min || 5) * 2 - Math.max(v.stock || 0, 0));
+    PEDIDO[v.vid] = sug;
+  });
+  updateBadge();
+  renderProds();
+}
+
+// ── RENDER PEDIDO ──────────────────────────────────────────────────────
+function renderPedido() {
+  const el = document.getElementById('ped-sc');
+  el.innerHTML = '';
+
+  // Agrupar PEDIDO por categoría
+  const byCat = {};
+  Object.entries(PEDIDO).forEach(([vid, qty]) => {
+    if (qty <= 0) return;
+    const data = varById(vid);
+    if (!data) return;
+    const cid = data.catId || '__sin_cat__';
+    if (!byCat[cid]) byCat[cid] = [];
+    byCat[cid].push({ ...data, qty });
+  });
+
+  const cids = Object.keys(byCat);
+  if (!cids.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-shopping-cart"></i>El pedido está vacío.<br><br>Entrá a un proveedor y tocá + en los productos.</div>';
+    return;
+  }
+
+  cids.forEach(cid => {
+    const items = byCat[cid];
+    const total = items.reduce((s, i) => s + i.qty * (i.costo || 0), 0);
+
+    const card = document.createElement('div');
+    card.className = 'pc';
+
+    // Header
+    const hdr = document.createElement('div');
+    hdr.className = 'ph';
+    hdr.innerHTML = `<div class="phn"><i class="ti ti-tag" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${catLabel(cid)}</div>`;
+    const pb = document.createElement('button');
+    pb.className = 'btns bg';
+    pb.innerHTML = '<i class="ti ti-download"></i> PDF';
+    pb.onclick = () => pdfCat(cid, items);
+    hdr.appendChild(pb);
+    card.appendChild(hdr);
+
+    // Filas de items
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'prow';
+      row.innerHTML = `
+        <div class="prn">${item.nombre}${item.sku ? '<br><span style="font-size:10px;color:var(--text3)">'+item.sku+'</span>' : ''}</div>
+        <div class="prq">
+          <div class="qb" style="width:28px;height:28px;font-size:17px">−</div>
+          <div class="qnum" style="min-width:22px;font-size:13px">${item.qty}</div>
+          <div class="qb" style="width:28px;height:28px;font-size:17px">+</div>
+          <div class="qb" style="width:28px;height:28px;font-size:13px;color:var(--red-text)"><i class="ti ti-trash"></i></div>
+        </div>`;
+
+      const vid   = item.vid;
+      const qnEl  = row.querySelector('.qnum');
+      const btns  = row.querySelectorAll('.qb');
+
+      btns[0].onclick = () => {  // −
+        const cur = PEDIDO[vid] || 0;
+        if (cur <= 0) return;
+        PEDIDO[vid] = cur - 1;
+        if (PEDIDO[vid] <= 0) { delete PEDIDO[vid]; updateBadge(); renderPedido(); return; }
+        qnEl.textContent = PEDIDO[vid];
+        updateBadge();
+      };
+      btns[1].onclick = () => {  // +
+        PEDIDO[vid] = (PEDIDO[vid] || 0) + 1;
+        qnEl.textContent = PEDIDO[vid];
+        updateBadge();
+      };
+      btns[2].onclick = () => {  // 🗑
+        delete PEDIDO[vid];
+        updateBadge();
+        renderPedido();
+      };
+
+      card.appendChild(row);
+    });
+
+    // Total
+    const tot = document.createElement('div');
+    tot.className = 'ptot';
+    tot.innerHTML = `<span style="color:var(--text2)">Total estimado:</span><strong>${total ? '$'+total.toLocaleString('es-AR') : '—'}</strong>`;
+    card.appendChild(tot);
+    el.appendChild(card);
+  });
+}
+
+// ── PDF ────────────────────────────────────────────────────────────────
+function pdfHdr(doc, title) {
+  doc.setFillColor(24,95,165); doc.rect(0,0,210,26,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont('helvetica','bold'); doc.text(title,14,15);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
+  doc.text(new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'}),14,22);
+  doc.setTextColor(40,40,40);
+}
+function pdfFtr(doc) {
+  const n = doc.internal.getNumberOfPages();
+  for (let i=1;i<=n;i++) {
+    doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150);
+    doc.line(14,287,196,287);
+    doc.text('Pág. '+i+'/'+n,196,292,{align:'right'});
+    doc.text('Stock & Pedidos',14,292);
+  }
+}
+function buildTbl(doc, items, y) {
+  const total = items.reduce((s,i) => s + i.qty*(i.costo||0), 0);
+  doc.autoTable({
+    head:[['Producto','SKU','Cant.','Precio unit.','Subtotal']],
+    body: items.map(i => [
+      i.nombre, i.sku||'—', i.qty,
+      i.costo ? '$'+i.costo.toLocaleString('es-AR') : '—',
+      i.costo ? '$'+(i.qty*i.costo).toLocaleString('es-AR') : '—',
+    ]),
+    foot:[['','','','Total:', total?'$'+total.toLocaleString('es-AR'):'—']],
+    startY: y,
+    styles:{fontSize:9,cellPadding:4},
+    headStyles:{fillColor:[24,95,165],textColor:255,fontStyle:'bold'},
+    footStyles:{fillColor:[230,241,251],textColor:[12,68,124],fontStyle:'bold'},
+    alternateRowStyles:{fillColor:[248,248,246]},
+    columnStyles:{2:{halign:'center'},3:{halign:'right'},4:{halign:'right'}},
+  });
+}
+
+function pdfCat(cid, items) {
+  if (!items?.length) { alert('Sin productos.'); return; }
+  const {jsPDF} = window.jspdf; const doc = new jsPDF();
+  pdfHdr(doc, 'Pedido — ' + catLabel(cid));
+  buildTbl(doc, items, 32);
+  pdfFtr(doc);
+  doc.save('pedido-'+catLabel(cid).replace(/\s+/g,'-').toLowerCase()+'-'+new Date().toISOString().slice(0,10)+'.pdf');
+}
+
+function pdfAll() {
+  const byCat = {};
+  Object.entries(PEDIDO).forEach(([vid, qty]) => {
+    if (qty <= 0) return;
+    const data = varById(vid);
+    if (!data) return;
+    const cid = data.catId || '__sin_cat__';
+    if (!byCat[cid]) byCat[cid] = [];
+    byCat[cid].push({ ...data, qty });
+  });
+  const cids = Object.keys(byCat);
+  if (!cids.length) { alert('El pedido está vacío.'); return; }
+  const {jsPDF} = window.jspdf; const doc = new jsPDF(); let first = true;
+  cids.forEach(cid => {
+    if (!first) doc.addPage(); first = false;
+    pdfHdr(doc, 'Pedido — ' + catLabel(cid));
+    buildTbl(doc, byCat[cid], 32);
+  });
+  pdfFtr(doc);
+  doc.save('pedidos-'+new Date().toISOString().slice(0,10)+'.pdf');
 }
 </script>
 </body>
