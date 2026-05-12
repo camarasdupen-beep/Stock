@@ -375,7 +375,7 @@ function varById(vid) {
       nombre: item.item_name + (v.option1_value ? ' — '+v.option1_value : ''),
       sku:    v.sku || '',
       costo:  v.cost || 0,
-      catId:  item.category_id || '',
+      catId:  item.category_id || SIN_CAT_ID,
     };
   }
   return null;
@@ -423,58 +423,87 @@ function goPage(name) {
 }
 
 // ── RENDER CATS ────────────────────────────────────────────────────────
+const SIN_CAT_ID = '__sin_proveedor__';
+
+function varsSinCat() {
+  const out = [];
+  ITEMS.filter(item => !item.category_id).forEach(item => {
+    (item.variants || []).forEach(v => {
+      const vid = getVarId(v);
+      const min = getLowStock(v);
+      const stock = getStock(vid);
+      out.push({
+        vid,
+        nombre: item.item_name + (v.option1_value ? ' — '+v.option1_value : ''),
+        sku: v.sku || '', costo: v.cost || 0,
+        min, stock, est: getEstado(vid, min),
+      });
+    });
+  });
+  return out;
+}
+
+function addCatRow(el, id, name, vars, icon, iconColor) {
+  const crit  = vars.filter(v => v.est === 'crit').length;
+  const low   = vars.filter(v => v.est === 'low').length;
+  const inPed = vars.reduce((s, v) => s + (PEDIDO[v.vid] || 0), 0);
+  const div = document.createElement('div');
+  div.className = 'cr';
+  div.innerHTML = `
+    <div class="ci" style="background:${iconColor}"><i class="ti ${icon}"></i></div>
+    <div class="cn">
+      <div class="cn-name">${name}</div>
+      <div class="cn-sub">${vars.length} producto${vars.length!==1?'s':''}</div>
+      <div class="cn-b">
+        ${crit  ? `<span class="badge bcrit">${crit} sin stock</span>` : ''}
+        ${low   ? `<span class="badge blow">${low} bajo</span>` : ''}
+        ${inPed ? `<span class="badge bok">${inPed} en pedido</span>` : ''}
+      </div>
+    </div>
+    <i class="ti ti-chevron-right" style="color:var(--text3);font-size:18px;flex-shrink:0"></i>`;
+  div.onclick = () => {
+    CAT = id;
+    document.getElementById('prod-title').textContent = name;
+    goPage('prods');
+  };
+  el.appendChild(div);
+}
+
 function renderCats() {
   const el = document.getElementById('cats-sc');
   el.innerHTML = '';
-
-  const sorted = [...CATS].sort((a,b) => a.name.localeCompare(b.name));
   let shown = 0;
 
+  // Proveedores con categoría asignada
+  const sorted = [...CATS].sort((a,b) => a.name.localeCompare(b.name));
   sorted.forEach(cat => {
     const vars = varsByCat(cat.id);
     if (!vars.length) return;
     shown++;
-
-    const crit  = vars.filter(v => v.est === 'crit').length;
-    const low   = vars.filter(v => v.est === 'low').length;
-    const inPed = vars.reduce((s, v) => s + (PEDIDO[v.vid] || 0), 0);
-
-    const div = document.createElement('div');
-    div.className = 'cr';
-    div.innerHTML = `
-      <div class="ci"><i class="ti ti-tag"></i></div>
-      <div class="cn">
-        <div class="cn-name">${cat.name}</div>
-        <div class="cn-sub">${vars.length} producto${vars.length!==1?'s':''}</div>
-        <div class="cn-b">
-          ${crit  ? `<span class="badge bcrit">${crit} sin stock</span>` : ''}
-          ${low   ? `<span class="badge blow">${low} bajo</span>` : ''}
-          ${inPed ? `<span class="badge bok">${inPed} en pedido</span>` : ''}
-        </div>
-      </div>
-      <i class="ti ti-chevron-right" style="color:var(--text3);font-size:18px;flex-shrink:0"></i>`;
-    div.onclick = () => {
-      CAT = cat.id;
-      document.getElementById('prod-title').textContent = cat.name;
-      goPage('prods');
-    };
-    el.appendChild(div);
+    addCatRow(el, cat.id, cat.name, vars, 'ti-tag', 'var(--blue)');
   });
 
+  // Sin categoría — al final con ícono naranja
+  const sinCat = varsSinCat();
+  if (sinCat.length) {
+    shown++;
+    const sep = document.createElement('div');
+    sep.style.cssText = 'padding:10px 16px 4px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;border-top:1px solid var(--border);margin-top:4px';
+    sep.textContent = 'Sin proveedor asignado';
+    el.appendChild(sep);
+    addCatRow(el, SIN_CAT_ID, 'Sin proveedor asignado (' + sinCat.length + ')', sinCat, 'ti-alert-circle', '#854F0B');
+  }
+
   if (!shown) {
-    el.innerHTML = `<div class="empty"><i class="ti ti-package"></i>
-      Ningún producto tiene categoría asignada en Loyverse.<br><br>
-      En Loyverse, editá los productos y asignales una categoría (que son tus proveedores).
-    </div>`;
+    el.innerHTML = '<div class="empty"><i class="ti ti-package"></i>Sin productos cargados.</div>';
   }
 }
-
 // ── RENDER PRODS ───────────────────────────────────────────────────────
 function renderProds() {
   const el = document.getElementById('prods-sc');
   el.innerHTML = '';
 
-  const vars = varsByCat(CAT);
+  const vars = CAT === SIN_CAT_ID ? varsSinCat() : varsByCat(CAT);
   if (!vars.length) {
     el.innerHTML = '<div class="empty"><i class="ti ti-package"></i>Sin productos en esta categoría.</div>';
     return;
@@ -537,7 +566,8 @@ function renderProds() {
 }
 
 function addSugeridos() {
-  const vars = varsByCat(CAT).filter(v => v.est !== 'ok');
+  const allVars = CAT === SIN_CAT_ID ? varsSinCat() : varsByCat(CAT);
+  const vars = allVars.filter(v => v.est !== 'ok');
   if (!vars.length) { alert('No hay productos con stock bajo o sin stock en esta categoría.'); return; }
   vars.forEach(v => {
     const sug = Math.max(1, (v.min || 5) * 2 - Math.max(v.stock || 0, 0));
