@@ -30,72 +30,97 @@
 html,body{height:100%;background:var(--bg)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--text);font-size:14px;overflow:hidden}
 .app{max-width:480px;margin:0 auto;height:100dvh;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:transform .28s cubic-bezier(.4,0,.2,1)}
-.screen.behind{transform:translateX(-100%)}
-.screen.hidden{transform:translateX(100%)}
-.screen.active{transform:translateX(0)}
+
+/* screens */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);transition:transform .26s cubic-bezier(.4,0,.2,1)}
+.screen.s-left{transform:translateX(-100%)}
+.screen.s-right{transform:translateX(100%)}
+.screen.s-show{transform:translateX(0)}
+
+/* topbar */
 .topbar{display:flex;align-items:center;padding:0 8px;height:52px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;gap:4px}
-.topbar-title{font-size:16px;font-weight:600;flex:1;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topbar-title{font-size:16px;font-weight:600;flex:1;padding:0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .icon-btn{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:var(--r);border:none;background:none;cursor:pointer;color:var(--text);font-size:22px;-webkit-tap-highlight-color:transparent;flex-shrink:0}
 .icon-btn:active{background:var(--bg2)}
-.bottom-nav{display:flex;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;font-size:10px;font-weight:500;cursor:pointer;color:var(--text2);border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;position:relative}
-.nav-btn i{font-size:22px}
-.nav-btn.active{color:var(--blue)}
+
+/* bottom nav */
+.bnav{display:flex;border-top:1px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom)}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px 6px;font-size:10px;font-weight:500;cursor:pointer;color:var(--text2);border:none;background:none;font-family:inherit;-webkit-tap-highlight-color:transparent;position:relative}
+.nb i{font-size:22px}
+.nb.on{color:var(--blue)}
+.cc{position:absolute;top:3px;right:2px;min-width:16px;height:16px;background:var(--blue);color:#fff;border-radius:99px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 3px}
+
+/* scroll */
 .scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .pad{padding:12px 14px}
-.connect-wrap{flex:1;overflow-y:auto;padding:32px 20px;display:flex;flex-direction:column;gap:16px}
-.connect-logo{width:60px;height:60px;background:var(--blue);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto}
-.connect-title{font-size:20px;font-weight:700;text-align:center}
-.connect-sub{font-size:13px;color:var(--text2);text-align:center;line-height:1.6}
-.field-label{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
+
+/* connect */
+.cwrap{flex:1;overflow-y:auto;padding:32px 20px;display:flex;flex-direction:column;gap:16px}
+.clogo{width:60px;height:60px;background:var(--blue);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto}
+.ctitle{font-size:20px;font-weight:700;text-align:center}
+.csub{font-size:13px;color:var(--text2);text-align:center;line-height:1.6}
+.flbl{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px}
 input[type=password]{width:100%;padding:13px 14px;border:1.5px solid var(--border2);border-radius:var(--r);font-size:15px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none}
 input[type=password]:focus{border-color:var(--blue)}
 .hint{font-size:12px;color:var(--text3);line-height:1.6;text-align:center}
-.err{background:var(--red-bg);color:var(--red-text);font-size:12px;padding:10px 13px;border-radius:var(--r);display:none}
-.log{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;font-family:monospace;max-height:200px;overflow-y:auto;display:none;color:var(--text2);line-height:1.7;word-break:break-all}
-.log .ok{color:var(--green-text)}.log .er{color:var(--red-text)}.log .in{color:#185FA5}
-.btn-primary{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:var(--r);background:var(--blue);color:#fff;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
-.btn-primary:disabled{opacity:.5}
-.btn-sm{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
-.btn-green{background:var(--green);color:#fff}
+.errbox{background:var(--red-bg);color:var(--red-text);font-size:12px;padding:10px 13px;border-radius:var(--r);display:none}
+.logbox{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r);padding:10px;font-size:11px;font-family:monospace;max-height:160px;overflow-y:auto;display:none;color:var(--text2);line-height:1.7;word-break:break-all}
+.logbox .ok{color:var(--green-text)}.logbox .er{color:var(--red-text)}.logbox .in{color:#185FA5}
+
+/* buttons */
+.btnp{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:var(--r);background:var(--blue);color:#fff;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.btnp:disabled{opacity:.5}
+.btnsm{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;border:none;cursor:pointer;font-family:inherit;-webkit-tap-highlight-color:transparent}
+.btnsm:active{opacity:.75}
+.btn-g{background:var(--green);color:#fff}
+
+/* badges */
 .badge{display:inline-flex;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600}
-.b-ok{background:var(--green-bg);color:var(--green-text)}
-.b-low{background:var(--amber-bg);color:var(--amber-text)}
-.b-crit{background:var(--red-bg);color:var(--red-text)}
-.cat-item{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent;gap:12px}
-.cat-item:active{background:var(--bg2)}
-.cat-icon{width:40px;height:40px;border-radius:var(--r);background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
-.cat-info{flex:1;min-width:0}
-.cat-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-sub{font-size:12px;color:var(--text2);margin-top:2px}
-.cat-alerts{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
-.prod-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px}
-.prod-main{flex:1;min-width:0}
-.prod-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prod-sku{font-size:11px;color:var(--text3);margin-top:1px}
-.prod-stock{display:flex;align-items:center;gap:8px;margin-top:5px}
-.stock-num{font-size:14px;font-weight:700}
+.bok{background:var(--green-bg);color:var(--green-text)}
+.blow{background:var(--amber-bg);color:var(--amber-text)}
+.bcrit{background:var(--red-bg);color:var(--red-text)}
+
+/* category list */
+.catrow{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;-webkit-tap-highlight-color:transparent;gap:12px}
+.catrow:active{background:var(--bg2)}
+.caticon{width:40px;height:40px;border-radius:var(--r);background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:18px;color:#fff;flex-shrink:0}
+.catinfo{flex:1;min-width:0}
+.catname{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catsub{font-size:12px;color:var(--text2);margin-top:2px}
+.catalerts{display:flex;gap:5px;margin-top:5px;flex-wrap:wrap}
+
+/* product rows */
+.prodrow{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px}
+.prodmain{flex:1;min-width:0}
+.prodname{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prodsku{font-size:11px;color:var(--text3);margin-top:1px}
+.prodstock{display:flex;align-items:center;gap:8px;margin-top:5px}
+.snum{font-size:14px;font-weight:700}
 .pbar{width:48px;height:3px;background:var(--bg3);border-radius:9px;overflow:hidden;display:inline-block;vertical-align:middle}
-.pbar-fill{height:100%;border-radius:9px;display:block}
-.qty-ctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
-.qbtn{width:34px;height:34px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--text);-webkit-tap-highlight-color:transparent;user-select:none;flex-shrink:0}
-.qbtn:active{background:var(--bg3)}
-.qbtn.plus{background:var(--blue);color:#fff;border-color:var(--blue)}
-.qty-num{min-width:26px;text-align:center;font-size:15px;font-weight:700}
-.pedido-cat{margin-bottom:14px;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
-.pedido-cat-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg2);gap:8px}
-.pedido-cat-name{font-size:14px;font-weight:600}
-.pedido-row{display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);gap:10px}
-.pedido-row-name{flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pedido-row-qty{display:flex;align-items:center;gap:5px;flex-shrink:0}
-.pedido-total{display:flex;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--border);font-size:13px;gap:6px;background:var(--bg2)}
+.pbarfill{height:100%;border-radius:9px;display:block}
+
+/* qty control */
+.qctrl{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qb{width:34px;height:34px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--text);-webkit-tap-highlight-color:transparent;user-select:none;flex-shrink:0;transition:opacity .1s}
+.qb:active{background:var(--bg3)}
+.qb.plus{background:var(--blue);color:#fff;border-color:var(--blue)}
+.qnum{min-width:26px;text-align:center;font-size:15px;font-weight:700;color:var(--text)}
+
+/* pedido */
+.pedcat{margin-bottom:14px;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden}
+.pedhdr{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--bg2);gap:8px}
+.pedname{font-size:14px;font-weight:600}
+.pedrow{display:flex;align-items:center;padding:10px 14px;border-top:1px solid var(--border);gap:10px}
+.pedrname{flex:1;font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pedqty{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.pedtot{display:flex;justify-content:flex-end;padding:10px 14px;border-top:1px solid var(--border);font-size:13px;gap:6px;background:var(--bg2)}
+
+/* misc */
 .empty{text-align:center;padding:48px 20px;color:var(--text2);font-size:13px;line-height:1.7}
 .empty i{font-size:36px;display:block;margin:0 auto 12px;color:var(--text3)}
-.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px;color:var(--text2);font-size:13px;text-align:center}
-.spinner{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
-@keyframes spin{to{transform:rotate(360deg)}}
-.cart-count{position:absolute;top:3px;right:0;min-width:16px;height:16px;background:var(--blue);color:#fff;border-radius:99px;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;padding:0 3px}
+.ldg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:48px;color:var(--text2);font-size:13px}
+.spin{width:24px;height:24px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
 .store-sel{padding:6px 10px;border:1px solid var(--border2);border-radius:99px;font-size:12px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none;max-width:120px}
 </style>
 </head>
@@ -103,574 +128,622 @@ input[type=password]:focus{border-color:var(--blue)}
 <div class="app">
 
 <!-- CONNECT -->
-<div class="screen active" id="sc-connect" style="position:relative;transform:none">
-  <div class="connect-wrap">
-    <div class="connect-logo"><i class="ti ti-building-store"></i></div>
-    <div class="connect-title">Stock & Pedidos</div>
-    <div class="connect-sub">Conectate a Loyverse para gestionar stock y armar pedidos por proveedor.</div>
-    <div>
-      <div class="field-label">Token de acceso</div>
-      <input type="password" id="token-input" placeholder="Pegá tu Bearer token…"/>
+<div class="screen s-show" id="sc-con" style="position:relative;transform:none">
+  <div class="cwrap">
+    <div class="clogo"><i class="ti ti-building-store"></i></div>
+    <div class="ctitle">Stock & Pedidos</div>
+    <div class="csub">Conectate a Loyverse para ver stock por proveedor y armar pedidos.</div>
+    <div><div class="flbl">Token de acceso</div>
+      <input type="password" id="tok" placeholder="Pegá tu Bearer token…"/>
     </div>
-    <button class="btn-primary" id="btn-con" onclick="conectar()">
-      <i class="ti ti-plug"></i> Conectar
-    </button>
-    <div class="log" id="log-box"></div>
-    <div class="err" id="conn-err"></div>
+    <button class="btnp" id="btncon" onclick="conectar()"><i class="ti ti-plug"></i> Conectar</button>
+    <div class="logbox" id="logbox"></div>
+    <div class="errbox" id="errbox"></div>
     <div class="hint">Loyverse → Configuración → Integraciones → API de acceso</div>
   </div>
 </div>
 
 <!-- PROVEEDORES -->
-<div class="screen hidden" id="sc-cats">
+<div class="screen s-right" id="sc-cats">
   <div class="topbar">
     <span class="topbar-title">Proveedores</span>
     <select class="store-sel" id="store-sel" onchange="onStoreChange()"></select>
     <button class="icon-btn" onclick="recargar()"><i class="ti ti-refresh"></i></button>
   </div>
   <div class="scroll" id="cats-list"></div>
-  <div class="bottom-nav">
-    <button class="nav-btn active" id="nc-cats" onclick="goMain('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
-    <button class="nav-btn" id="nc-pedido" onclick="goMain('pedido')">
+  <div class="bnav">
+    <button class="nb on" id="nb-cats" onclick="showCats()"><i class="ti ti-building-store"></i>Proveedores</button>
+    <button class="nb" id="nb-ped" onclick="showPedido()">
       <i class="ti ti-shopping-cart"></i>Pedido
-      <span class="cart-count" id="cc1">0</span>
+      <span class="cc" id="cc1"></span>
     </button>
-    <button class="nav-btn" onclick="desconectar()"><i class="ti ti-logout"></i>Salir</button>
+    <button class="nb" onclick="desconectar()"><i class="ti ti-logout"></i>Salir</button>
   </div>
 </div>
 
 <!-- PRODUCTOS -->
-<div class="screen hidden" id="sc-prods">
+<div class="screen s-right" id="sc-prods">
   <div class="topbar">
-    <button class="icon-btn" onclick="goBack()"><i class="ti ti-arrow-left"></i></button>
-    <span class="topbar-title" id="prods-title">Productos</span>
-    <button class="icon-btn" id="btn-sug" title="Agregar sugeridos"><i class="ti ti-sparkles"></i></button>
+    <button class="icon-btn" onclick="closeProd()"><i class="ti ti-arrow-left"></i></button>
+    <span class="topbar-title" id="prod-title">Productos</span>
+    <button class="icon-btn" onclick="addSugeridos()" title="Agregar sugeridos"><i class="ti ti-sparkles"></i></button>
   </div>
   <div class="scroll" id="prods-list"></div>
 </div>
 
 <!-- PEDIDO -->
-<div class="screen hidden" id="sc-pedido">
+<div class="screen s-right" id="sc-ped">
   <div class="topbar">
     <span class="topbar-title">Pedido</span>
-    <button class="icon-btn" onclick="exportPDFTodos()"><i class="ti ti-download"></i></button>
+    <button class="icon-btn" onclick="exportTodos()"><i class="ti ti-download"></i></button>
   </div>
-  <div class="scroll pad" id="pedido-list"></div>
-  <div class="bottom-nav">
-    <button class="nav-btn" id="np-cats" onclick="goMain('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
-    <button class="nav-btn active" id="np-pedido" onclick="goMain('pedido')">
+  <div class="scroll pad" id="ped-list"></div>
+  <div class="bnav">
+    <button class="nb" id="nb2-cats" onclick="showCats()"><i class="ti ti-building-store"></i>Proveedores</button>
+    <button class="nb on" id="nb2-ped" onclick="showPedido()">
       <i class="ti ti-shopping-cart"></i>Pedido
-      <span class="cart-count" id="cc2">0</span>
+      <span class="cc" id="cc2"></span>
     </button>
-    <button class="nav-btn" onclick="desconectar()"><i class="ti ti-logout"></i>Salir</button>
+    <button class="nb" onclick="desconectar()"><i class="ti ti-logout"></i>Salir</button>
   </div>
 </div>
 
-</div>
+</div><!-- /app -->
 <script>
-let TOKEN='', allItems=[], allInventory=[], allCategories=[], allStores=[];
-let currentStore='', currentCatId=null;
-let pedido={};
+// ─────────────────────────────────────────────────────────────────────
+// STATE — todo en un solo lugar, nunca duplicado
+// ─────────────────────────────────────────────────────────────────────
+const S = {
+  token: '',
+  items: [],       // [{id, item_name, category_id, variants:[{id,variant_name,cost,low_stock,sku}], low_stock}]
+  inventory: [],   // [{variant_id, store_id, in_stock}]
+  categories: [],  // [{id, name}]
+  stores: [],      // [{id, name}]
+  storeId: '',     // tienda activa
+  catId: '',       // categoría abierta
 
-// ── LOG ────────────────────────────────────────────────────────────────
-const logEl=document.getElementById('log-box');
-function log(msg,type='in'){
-  logEl.style.display='block';
-  const d=document.createElement('div');
-  d.className=type;
-  d.textContent=(type==='ok'?'✓ ':type==='er'?'✗ ':'→ ')+msg;
+  // pedido: Map<catId, Map<variantId, qty>>
+  // Guardamos solo IDs + qty; los datos del producto los sacamos de S.items
+  pedido: {},      // { catId: { variantId: qty } }
+};
+
+// ─────────────────────────────────────────────────────────────────────
+// LOG
+// ─────────────────────────────────────────────────────────────────────
+const logEl = document.getElementById('logbox');
+function log(msg, t='in') {
+  logEl.style.display = 'block';
+  const d = document.createElement('div');
+  d.className = t;
+  d.textContent = (t==='ok'?'✓ ':t==='er'?'✗ ':'→ ') + msg;
   logEl.appendChild(d);
-  logEl.scrollTop=logEl.scrollHeight;
+  logEl.scrollTop = logEl.scrollHeight;
 }
-function clearLog(){logEl.innerHTML='';logEl.style.display='none';}
+function clearLog() { logEl.innerHTML=''; logEl.style.display='none'; }
 
-// ── API ────────────────────────────────────────────────────────────────
-async function loyFetch(path){
-  const url='https://api.loyverse.com/v1.0'+path;
-  const h={'Authorization':'Bearer '+TOKEN};
-  try{
-    const r=await fetch(url,{headers:h});
-    if(r.ok) return r.json();
-    const txt=await r.text();
-    throw new Error('HTTP '+r.status);
-  }catch(e){
-    // Fallback: proxy CORS
-    const proxy='https://corsproxy.io/?'+encodeURIComponent(url);
-    const r2=await fetch(proxy,{headers:h});
-    if(!r2.ok){const t=await r2.text();throw new Error('Error '+r2.status+': '+t.slice(0,60));}
+// ─────────────────────────────────────────────────────────────────────
+// API
+// ─────────────────────────────────────────────────────────────────────
+async function apiFetch(path) {
+  const url = 'https://api.loyverse.com/v1.0' + path;
+  const h = { 'Authorization': 'Bearer ' + S.token };
+  try {
+    const r = await fetch(url, { headers: h });
+    if (r.ok) return r.json();
+    throw new Error('HTTP ' + r.status);
+  } catch(e) {
+    const r2 = await fetch('https://corsproxy.io/?' + encodeURIComponent(url), { headers: h });
+    if (!r2.ok) throw new Error('Error ' + r2.status);
     return r2.json();
   }
 }
 
-// fetchAll con paginación
-async function fetchAll(path,key,extra=''){
-  let results=[],cursor=null;
-  do{
-    const sep=extra.includes('?')?'&':'?';
-    const d=await loyFetch(path+extra+(cursor?sep+'cursor='+cursor:''));
-    results=results.concat(d[key]||[]);
-    cursor=d.cursor||null;
-  }while(cursor);
-  return results;
+async function fetchAll(path, key, extra='') {
+  let out=[], cursor=null;
+  do {
+    const sep = extra.includes('?') ? '&' : '?';
+    const d = await apiFetch(path + extra + (cursor ? sep+'cursor='+cursor : ''));
+    out = out.concat(d[key] || []);
+    cursor = d.cursor || null;
+  } while(cursor);
+  return out;
 }
 
-// ── CONECTAR ───────────────────────────────────────────────────────────
-async function conectar(){
-  const t=document.getElementById('token-input').value.trim();
-  const btn=document.getElementById('btn-con');
-  const err=document.getElementById('conn-err');
-  if(!t){err.textContent='Ingresá el token.';err.style.display='block';return;}
-  TOKEN=t; err.style.display='none'; clearLog();
-  btn.disabled=true;
-  btn.innerHTML='<div class="spinner" style="width:18px;height:18px;border-width:2px"></div> Conectando…';
-  try{
-    await cargarTodo();
-    document.getElementById('sc-connect').style.transform='translateX(-100%)';
-    const sc=document.getElementById('sc-cats');
-    sc.classList.remove('hidden');
-    sc.classList.add('active');
-  }catch(e){
-    TOKEN='';
-    log('ERROR: '+e.message,'er');
-    err.textContent=e.message;
-    err.style.display='block';
-  }finally{
-    btn.disabled=false;
-    btn.innerHTML='<i class="ti ti-plug"></i> Conectar';
+// ─────────────────────────────────────────────────────────────────────
+// CONNECT / LOAD
+// ─────────────────────────────────────────────────────────────────────
+async function conectar() {
+  const t = document.getElementById('tok').value.trim();
+  const btn = document.getElementById('btncon');
+  const err = document.getElementById('errbox');
+  if (!t) { err.textContent='Ingresá el token.'; err.style.display='block'; return; }
+  S.token = t;
+  err.style.display = 'none';
+  clearLog();
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spin" style="width:18px;height:18px;border-width:2px"></div> Conectando…';
+  try {
+    await loadAll();
+    // Mostrar pantalla de categorías
+    document.getElementById('sc-con').style.transform = 'translateX(-100%)';
+    show('sc-cats');
+  } catch(e) {
+    S.token = '';
+    log('ERROR: '+e.message, 'er');
+    err.textContent = e.message;
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<i class="ti ti-plug"></i> Conectar';
   }
 }
 
-async function cargarTodo(){
-  // 1. Tiendas
-  log('Cargando tiendas…');
-  const sd=await loyFetch('/stores');
-  allStores=sd.stores||[];
-  log('Tiendas: '+allStores.map(s=>s.name).join(', '),'ok');
+async function loadAll() {
+  log('Tiendas…');
+  const sd = await apiFetch('/stores');
+  S.stores = sd.stores || [];
+  log('Tiendas: ' + S.stores.map(s=>s.name).join(', '), 'ok');
 
-  // 2. Categorías
-  log('Cargando categorías…');
-  allCategories=await fetchAll('/categories','categories');
-  log('Categorías: '+allCategories.length,'ok');
+  log('Categorías…');
+  S.categories = await fetchAll('/categories', 'categories');
+  log('Categorías: ' + S.categories.length, 'ok');
 
-  // 3. Productos (con sus variants)
-  log('Cargando productos…');
-  allItems=await fetchAll('/items','items');
-  log('Productos: '+allItems.length,'ok');
+  log('Productos…');
+  S.items = await fetchAll('/items', 'items');
+  log('Productos: ' + S.items.length, 'ok');
 
-  // Debug: ver campos del primer item
-  if(allItems.length>0){
-    const s=allItems[0];
-    log('Item fields: '+Object.keys(s).join(', '),'in');
-    log('category_id: "'+s.category_id+'" | variants: '+s.variants?.length,'in');
-    if(s.variants?.[0]) log('variant_id: "'+s.variants[0].id+'"','in');
+  log('Inventario (puede tardar)…');
+  S.inventory = await fetchAll('/inventory', 'inventory_levels');
+  log('Inventario: ' + S.inventory.length + ' registros', 'ok');
+
+  // Debug cross-check
+  if (S.items.length && S.inventory.length) {
+    const vid = S.items[0].variants?.[0]?.id;
+    const m = S.inventory.find(i => i.variant_id === vid);
+    log('Check variant→inv: ' + (m ? 'OK store_id='+m.store_id+' in_stock='+m.in_stock : 'NO MATCH'), m?'ok':'er');
   }
 
-  // 4. Inventario — SIN filtrar por tienda, traer todo de una vez
-  // Esto evita múltiples llamadas y saturar el proxy
-  log('Cargando inventario (puede tardar)…');
-  allInventory=[];
+  // Store por defecto
+  const sel = document.getElementById('store-sel');
+  sel.innerHTML = S.stores.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+  if (!S.storeId && S.stores.length) S.storeId = S.stores[0].id;
+  sel.value = S.storeId;
+}
 
-  // Intentar sin store_id primero (trae todo)
-  try{
-    allInventory=await fetchAll('/inventory','inventory_levels');
-    log('Inventario total: '+allInventory.length+' registros','ok');
-  }catch(e){
-    // Si falla, intentar por tienda de a una
-    log('Fallback: por tienda…','in');
-    for(const s of allStores){
-      const inv=await fetchAll('/inventory','inventory_levels','?store_id='+s.id);
-      allInventory=allInventory.concat(inv);
-      log('  '+s.name+': '+inv.length,'ok');
-    }
-  }
+async function recargar() {
+  document.getElementById('cats-list').innerHTML = '<div class="ldg"><div class="spin"></div>Actualizando…</div>';
+  try { await loadAll(); renderCats(); }
+  catch(e) { document.getElementById('cats-list').innerHTML = '<div class="empty"><i class="ti ti-alert-circle"></i>'+e.message+'</div>'; }
+}
 
-  // Debug inventario
-  if(allInventory.length>0){
-    const s=allInventory[0];
-    log('Inv fields: '+Object.keys(s).join(', '),'in');
-    log('store_id: "'+s.store_id+'" | variant_id: "'+s.variant_id+'" | in_stock: '+s.in_stock,'in');
-  }
-
-  // Cross-check
-  if(allItems.length>0&&allInventory.length>0){
-    const vid=allItems[0].variants?.[0]?.id;
-    const match=allInventory.find(i=>i.variant_id===vid);
-    log('Cross-check variant "'+vid+'": '+(match?'encontrado ✓':'NO encontrado ✗'),'in');
-    if(match) log('Match: store_id="'+match.store_id+'" in_stock='+match.in_stock,'ok');
-  }
-
-  // Store activo
-  populateStoreFilter();
-  if(!currentStore&&allStores.length) currentStore=allStores[0].id;
-  document.getElementById('store-sel').value=currentStore;
-
+function onStoreChange() {
+  S.storeId = document.getElementById('store-sel').value;
   renderCats();
 }
 
-async function recargar(){
-  document.getElementById('cats-list').innerHTML='<div class="loading"><div class="spinner"></div>Actualizando…</div>';
-  try{await cargarTodo();}
-  catch(e){document.getElementById('cats-list').innerHTML='<div class="empty"><i class="ti ti-alert-circle"></i>'+e.message+'</div>';}
-}
-
-function desconectar(){
-  TOKEN='';allItems=[];allInventory=[];allCategories=[];allStores=[];
-  pedido={};currentStore='';currentCatId=null;
+function desconectar() {
+  Object.assign(S, { token:'', items:[], inventory:[], categories:[], stores:[], storeId:'', catId:'', pedido:{} });
   clearLog();
-  ['sc-cats','sc-prods','sc-pedido'].forEach(id=>{
-    const el=document.getElementById(id);
-    el.classList.remove('active','behind');
-    el.classList.add('hidden');
+  document.getElementById('tok').value = '';
+  document.getElementById('errbox').style.display = 'none';
+  ['sc-cats','sc-prods','sc-ped'].forEach(id => {
+    document.getElementById(id).className = 'screen s-right';
   });
-  document.getElementById('sc-connect').style.transform='';
-  document.getElementById('token-input').value='';
-  document.getElementById('conn-err').style.display='none';
-  updateCartBadge();
+  document.getElementById('sc-con').style.transform = '';
+  updateBadge();
 }
 
-function populateStoreFilter(){
-  document.getElementById('store-sel').innerHTML=allStores.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
-}
-function onStoreChange(){currentStore=document.getElementById('store-sel').value;renderCats();}
-
-// ── STOCK ──────────────────────────────────────────────────────────────
-function getStock(vId){
-  // Buscar todos los registros para esta variante
-  const all=allInventory.filter(i=>i.variant_id===vId);
-  if(!all.length) return -1; // -1 = sin datos
-
-  // Filtrar por tienda activa si hay coincidencia
-  const byStore=all.filter(i=>i.store_id===currentStore);
-  const src=byStore.length?byStore:all;
-
-  return src.reduce((s,i)=>s+(parseFloat(i.in_stock)||0),0);
+// ─────────────────────────────────────────────────────────────────────
+// HELPERS — stock y datos
+// ─────────────────────────────────────────────────────────────────────
+function getStock(variantId) {
+  const all = S.inventory.filter(i => i.variant_id === variantId);
+  if (!all.length) return null;
+  const byStore = all.filter(i => i.store_id === S.storeId);
+  const src = byStore.length ? byStore : all;
+  return src.reduce((s, i) => s + (parseFloat(i.in_stock) || 0), 0);
 }
 
-function getEstado(stock){
-  if(stock<0) return 'ok';   // sin datos de inventario → no marcar error
-  if(stock===0) return 'crit';
+function estado(stock, min) {
+  if (stock === null) return 'ok';
+  if (stock <= 0) return 'crit';
+  if (min > 0 && stock < min) return 'low';
   return 'ok';
 }
+const eLabel = e => ({ ok:'Normal', low:'Bajo', crit:'Sin stock' }[e]);
+const eBadge = e => ({ ok:'bok', low:'blow', crit:'bcrit' }[e]);
 
-// Con stock mínimo si existe
-function getEstadoConMin(stock,min){
-  if(stock<0) return 'ok';
-  if(stock===0) return 'crit';
-  if(min>0&&stock<min) return 'low';
-  return 'ok';
+function catName(id) {
+  return (S.categories.find(c => c.id === id) || { name:'Sin categoría' }).name;
 }
 
-const estadoLabel=e=>({ok:'Normal',low:'Bajo',crit:'Sin stock'}[e]);
-const badgeClass=e=>({ok:'b-ok',low:'b-low',crit:'b-crit'}[e]);
-
-function getCatName(id){
-  if(!id) return 'Sin categoría';
-  return(allCategories.find(c=>c.id===id)||{name:'Sin categoría'}).name;
-}
-
-function itemsByCat(catId){
-  const rows=[];
-  allItems
-    .filter(item=>item.category_id===catId)
-    .forEach(item=>{
-      (item.variants||[]).forEach(v=>{
-        const stock=getStock(v.id);
-        const min=v.low_stock||item.low_stock||0;
-        rows.push({
-          variantId:v.id,
-          nombre:item.item_name+(v.variant_name&&v.variant_name!==item.item_name?' — '+v.variant_name:''),
+// Devuelve lista plana de variantes para una categoría
+// IMPORTANTE: no guarda referencias mutables, solo datos primitivos
+function variantsByCat(catId) {
+  const out = [];
+  S.items
+    .filter(item => item.category_id === catId)
+    .forEach(item => {
+      (item.variants || []).forEach(v => {
+        const stock = getStock(v.id);
+        const min = v.low_stock || item.low_stock || 0;
+        out.push({
+          vid:    v.id,
+          nombre: item.item_name + (v.variant_name && v.variant_name !== item.item_name ? ' — '+v.variant_name : ''),
+          sku:    v.sku || '',
+          costo:  v.cost || 0,
           stock,
           min,
-          costo:v.cost||0,
-          estado:getEstadoConMin(stock,min),
-          sku:v.sku||''
+          est:    estado(stock, min),
         });
       });
     });
-  return rows;
+  return out;
 }
 
-// ── RENDER CATS ────────────────────────────────────────────────────────
-function renderCats(){
-  const el=document.getElementById('cats-list');
-  if(!allCategories.length){
-    el.innerHTML='<div class="empty"><i class="ti ti-building-store"></i>Sin categorías en Loyverse.</div>';
-    return;
+// Lee la cantidad del pedido — SIEMPRE desde S.pedido, nunca desde closures
+function getQty(catId, variantId) {
+  return S.pedido[catId]?.[variantId] ?? 0;
+}
+
+function setQty(catId, variantId, qty) {
+  if (!S.pedido[catId]) S.pedido[catId] = {};
+  if (qty <= 0) {
+    delete S.pedido[catId][variantId];
+    if (!Object.keys(S.pedido[catId]).length) delete S.pedido[catId];
+  } else {
+    S.pedido[catId][variantId] = qty;
   }
-  el.innerHTML='';
-  const sorted=[...allCategories].sort((a,b)=>a.name.localeCompare(b.name));
-  let shown=0;
-  sorted.forEach(cat=>{
-    const prods=itemsByCat(cat.id);
-    if(!prods.length) return;
-    shown++;
-    const crit=prods.filter(r=>r.estado==='crit').length;
-    const low=prods.filter(r=>r.estado==='low').length;
-    const inPed=Object.values(pedido[cat.id]||{}).reduce((s,i)=>s+i.qty,0);
-    const div=document.createElement('div');
-    div.className='cat-item';
-    div.innerHTML=`
-      <div class="cat-icon"><i class="ti ti-tag"></i></div>
-      <div class="cat-info">
-        <div class="cat-name">${cat.name}</div>
-        <div class="cat-sub">${prods.length} producto${prods.length!==1?'s':''}</div>
-        <div class="cat-alerts">
-          ${crit?`<span class="badge b-crit">${crit} sin stock</span>`:''}
-          ${low?`<span class="badge b-low">${low} bajo</span>`:''}
-          ${inPed?`<span class="badge b-ok">${inPed} en pedido</span>`:''}
-        </div>
-      </div>
-      <i class="ti ti-chevron-right" style="color:var(--text3);font-size:18px;flex-shrink:0"></i>`;
-    div.addEventListener('click',()=>openCat(cat.id,cat.name));
-    el.appendChild(div);
+  updateBadge();
+}
+
+function totalItems() {
+  let t = 0;
+  Object.values(S.pedido).forEach(cat => Object.values(cat).forEach(q => t += q));
+  return t;
+}
+
+function updateBadge() {
+  const t = totalItems();
+  ['cc1','cc2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = t;
+    el.style.display = t > 0 ? 'flex' : 'none';
   });
-  if(!shown){
-    el.innerHTML='<div class="empty"><i class="ti ti-building-store"></i>Las categorías existen pero no tienen productos asociados.<br><br>Verificá que los productos tengan categoría asignada en Loyverse.</div>';
-  }
 }
 
-// ── OPEN CAT ───────────────────────────────────────────────────────────
-function openCat(catId,catName){
-  currentCatId=catId;
-  document.getElementById('prods-title').textContent=catName;
-  document.getElementById('btn-sug').onclick=()=>agregarSugeridos(catId);
-  document.getElementById('sc-cats').classList.add('behind');
-  document.getElementById('sc-cats').classList.remove('active');
-  const sp=document.getElementById('sc-prods');
-  sp.classList.remove('hidden');
-  sp.classList.add('active');
-  renderProds(catId);
+// ─────────────────────────────────────────────────────────────────────
+// SCREEN NAVIGATION
+// ─────────────────────────────────────────────────────────────────────
+function show(id) {
+  document.getElementById(id).className = 'screen s-show';
+}
+function hide(id, dir='s-right') {
+  document.getElementById(id).className = 'screen ' + dir;
 }
 
-function goBack(){
-  document.getElementById('sc-prods').classList.remove('active');
-  document.getElementById('sc-prods').classList.add('hidden');
-  document.getElementById('sc-cats').classList.remove('behind');
-  document.getElementById('sc-cats').classList.add('active');
+function showCats() {
+  hide('sc-prods');
+  hide('sc-ped');
+  show('sc-cats');
+  setNavActive('cats');
   renderCats();
 }
 
-// ── RENDER PRODS ───────────────────────────────────────────────────────
-function renderProds(catId){
-  const el=document.getElementById('prods-list');
-  const prods=itemsByCat(catId);
-  if(!prods.length){
-    el.innerHTML='<div class="empty"><i class="ti ti-package"></i>Sin productos en esta categoría.</div>';
+function showPedido() {
+  hide('sc-prods');
+  hide('sc-cats', 's-left');
+  show('sc-ped');
+  setNavActive('ped');
+  renderPedido();
+}
+
+function openCat(catId) {
+  S.catId = catId;
+  document.getElementById('prod-title').textContent = catName(catId);
+  hide('sc-cats', 's-left');
+  show('sc-prods');
+  renderProds();
+}
+
+function closeProd() {
+  hide('sc-prods');
+  show('sc-cats');
+  setNavActive('cats');
+  renderCats(); // refrescar badges de "en pedido"
+}
+
+function setNavActive(tab) {
+  ['nb-cats','nb-ped'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'nb' + (id.includes(tab) ? ' on' : '');
+  });
+  ['nb2-cats','nb2-ped'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'nb' + (id.includes(tab) ? ' on' : '');
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// RENDER CATS
+// ─────────────────────────────────────────────────────────────────────
+function renderCats() {
+  const el = document.getElementById('cats-list');
+  if (!S.categories.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-building-store"></i>Sin categorías.</div>';
     return;
   }
-  el.innerHTML='';
-  prods.forEach(r=>{
-    const qty=pedido[catId]?.[r.variantId]?.qty||0;
-    const stockDisplay=r.stock<0?'—':r.stock;
-    const barColor=r.estado==='crit'?'#E24B4A':r.estado==='low'?'#EF9F27':'#639922';
-    const pct=r.stock>0?(r.min?Math.min(100,Math.round((r.stock/(r.min*2))*100)):60):0;
+  el.innerHTML = '';
+  const sorted = [...S.categories].sort((a,b) => a.name.localeCompare(b.name));
+  let shown = 0;
+  sorted.forEach(cat => {
+    const vars = variantsByCat(cat.id);
+    if (!vars.length) return;
+    shown++;
+    const crit = vars.filter(v => v.est === 'crit').length;
+    const low  = vars.filter(v => v.est === 'low').length;
+    const inPed = Object.values(S.pedido[cat.id] || {}).reduce((s,q) => s+q, 0);
 
-    const row=document.createElement('div');
-    row.className='prod-row';
-
-    const leftHtml=`
-      <div class="prod-main">
-        <div class="prod-name">${r.nombre}</div>
-        ${r.sku?`<div class="prod-sku">${r.sku}</div>`:''}
-        <div class="prod-stock">
-          <span class="stock-num">${stockDisplay}</span>
-          <span class="badge ${badgeClass(r.estado)}">${estadoLabel(r.estado)}</span>
-          <span class="pbar"><span class="pbar-fill" style="width:${pct}%;background:${barColor}"></span></span>
+    const div = document.createElement('div');
+    div.className = 'catrow';
+    div.innerHTML = `
+      <div class="caticon"><i class="ti ti-tag"></i></div>
+      <div class="catinfo">
+        <div class="catname">${cat.name}</div>
+        <div class="catsub">${vars.length} producto${vars.length!==1?'s':''}</div>
+        <div class="catalerts">
+          ${crit ? `<span class="badge bcrit">${crit} sin stock</span>` : ''}
+          ${low  ? `<span class="badge blow">${low} bajo</span>` : ''}
+          ${inPed? `<span class="badge bok">${inPed} en pedido</span>` : ''}
         </div>
+      </div>
+      <i class="ti ti-chevron-right" style="color:var(--text3);font-size:18px;flex-shrink:0"></i>`;
+    // Solo un listener, sin closures con estado mutable
+    div.addEventListener('click', () => openCat(cat.id));
+    el.appendChild(div);
+  });
+  if (!shown) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-package"></i>Las categorías no tienen productos asociados.<br>Verificá que los productos tengan categoría en Loyverse.</div>';
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// RENDER PRODS — usa S.catId, lee qty desde S.pedido cada vez
+// ─────────────────────────────────────────────────────────────────────
+function renderProds() {
+  const el = document.getElementById('prods-list');
+  const vars = variantsByCat(S.catId);
+  if (!vars.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-package"></i>Sin productos en esta categoría.</div>';
+    return;
+  }
+  el.innerHTML = '';
+  vars.forEach(v => {
+    const barColor = v.est==='crit'?'#E24B4A':v.est==='low'?'#EF9F27':'#639922';
+    const pct = v.stock > 0 ? (v.min ? Math.min(100, Math.round(v.stock/(v.min*2)*100)) : 60) : 0;
+    const stockTxt = v.stock === null ? '—' : v.stock;
+
+    const row = document.createElement('div');
+    row.className = 'prodrow';
+    row.dataset.vid = v.vid; // guardar vid en el DOM para actualizarlo
+
+    row.innerHTML = `
+      <div class="prodmain">
+        <div class="prodname">${v.nombre}</div>
+        ${v.sku ? `<div class="prodsku">${v.sku}</div>` : ''}
+        <div class="prodstock">
+          <span class="snum">${stockTxt}</span>
+          <span class="badge ${eBadge(v.est)}">${eLabel(v.est)}</span>
+          <span class="pbar"><span class="pbarfill" style="width:${pct}%;background:${barColor}"></span></span>
+        </div>
+      </div>
+      <div class="qctrl">
+        <div class="qb minus">−</div>
+        <div class="qnum"></div>
+        <div class="qb plus">+</div>
       </div>`;
 
-    row.innerHTML=leftHtml+`
-      <div class="qty-ctrl">
-        <div class="qbtn minus">−</div>
-        <div class="qty-num">${qty||''}</div>
-        <div class="qbtn plus">+</div>
-      </div>`;
+    // Función local que refresca el display leyendo SIEMPRE desde S.pedido
+    function refresh() {
+      const q = getQty(S.catId, v.vid);
+      row.querySelector('.qnum').textContent = q || '';
+      const m = row.querySelector('.minus');
+      m.style.opacity = q > 0 ? '1' : '.3';
+      m.style.pointerEvents = q > 0 ? 'auto' : 'none';
+    }
+    refresh();
 
-    const plus=row.querySelector('.plus');
-    const minus=row.querySelector('.minus');
-    const qNum=row.querySelector('.qty-num');
-
-    // Actualizar estado visual del minus
-    const refreshMinus=()=>{
-      const q=pedido[catId]?.[r.variantId]?.qty||0;
-      minus.style.opacity=q>0?'1':'.3';
-      minus.style.pointerEvents=q>0?'auto':'none';
-    };
-    refreshMinus();
-
-    plus.addEventListener('click',()=>{
-      const cur=pedido[catId]?.[r.variantId]?.qty||0;
-      setPedidoQty(catId,r,cur+1);
-      qNum.textContent=cur+1;
-      refreshMinus();
+    row.querySelector('.plus').addEventListener('click', () => {
+      setQty(S.catId, v.vid, getQty(S.catId, v.vid) + 1);
+      refresh();
     });
-
-    minus.addEventListener('click',()=>{
-      const cur=pedido[catId]?.[r.variantId]?.qty||0;
-      if(cur<=0) return;
-      setPedidoQty(catId,r,cur-1);
-      qNum.textContent=cur-1||'';
-      refreshMinus();
+    row.querySelector('.minus').addEventListener('click', () => {
+      const q = getQty(S.catId, v.vid);
+      if (q <= 0) return;
+      setQty(S.catId, v.vid, q - 1);
+      refresh();
     });
 
     el.appendChild(row);
   });
 }
 
-function setPedidoQty(catId,r,qty){
-  if(!pedido[catId]) pedido[catId]={};
-  if(qty<=0){
-    delete pedido[catId][r.variantId];
-    if(!Object.keys(pedido[catId]).length) delete pedido[catId];
-  }else{
-    pedido[catId][r.variantId]={row:r,qty};
+function addSugeridos() {
+  const vars = variantsByCat(S.catId).filter(v => v.est !== 'ok');
+  if (!vars.length) { alert('No hay productos con stock bajo o sin stock.'); return; }
+  vars.forEach(v => {
+    const sug = Math.max(1, (v.min || 5) * 2 - Math.max(v.stock || 0, 0));
+    setQty(S.catId, v.vid, sug);
+  });
+  renderProds(); // re-renderizar para mostrar cantidades actualizadas
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// RENDER PEDIDO — reconstruye datos desde S.items usando los IDs guardados
+// ─────────────────────────────────────────────────────────────────────
+function getVariantData(variantId) {
+  // Buscar en S.items el item y variante correspondiente
+  for (const item of S.items) {
+    const v = (item.variants || []).find(v => v.id === variantId);
+    if (v) {
+      return {
+        vid:    v.id,
+        nombre: item.item_name + (v.variant_name && v.variant_name !== item.item_name ? ' — '+v.variant_name : ''),
+        sku:    v.sku || '',
+        costo:  v.cost || 0,
+      };
+    }
   }
-  updateCartBadge();
+  return null;
 }
 
-function agregarSugeridos(catId){
-  const prods=itemsByCat(catId).filter(r=>r.estado!=='ok');
-  if(!prods.length){alert('No hay productos con stock bajo o sin stock.');return;}
-  prods.forEach(r=>{
-    const sug=Math.max(1,(r.min||5)*2-Math.max(r.stock,0));
-    setPedidoQty(catId,r,sug);
-  });
-  renderProds(catId);
-}
+function renderPedido() {
+  const el = document.getElementById('ped-list');
+  const catIds = Object.keys(S.pedido).filter(cid => Object.keys(S.pedido[cid]).length > 0);
 
-function updateCartBadge(){
-  let total=0;
-  Object.values(pedido).forEach(cat=>Object.values(cat).forEach(i=>total+=i.qty));
-  ['cc1','cc2'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    el.textContent=total;
-    el.style.display=total>0?'flex':'none';
-  });
-}
-
-// ── NAV ────────────────────────────────────────────────────────────────
-function goMain(tab){
-  document.getElementById('sc-prods').classList.remove('active');
-  document.getElementById('sc-prods').classList.add('hidden');
-  ['cats','pedido'].forEach(t=>{
-    const el=document.getElementById('sc-'+t);
-    el.classList.remove('active','hidden','behind');
-    el.classList.add(t===tab?'active':'hidden');
-    document.getElementById('nc-'+t)?.classList.toggle('active',t===tab);
-    document.getElementById('np-'+t)?.classList.toggle('active',t===tab);
-  });
-  if(tab==='cats') renderCats();
-  if(tab==='pedido') renderPedido();
-}
-
-// ── PEDIDO ─────────────────────────────────────────────────────────────
-function renderPedido(){
-  const el=document.getElementById('pedido-list');
-  const cids=Object.keys(pedido);
-  if(!cids.length){
-    el.innerHTML='<div class="empty"><i class="ti ti-shopping-cart"></i>El pedido está vacío.<br>Entrá a un proveedor y agregá productos con +</div>';
+  if (!catIds.length) {
+    el.innerHTML = '<div class="empty"><i class="ti ti-shopping-cart"></i>El pedido está vacío.<br>Entrá a un proveedor y tocá + en los productos.</div>';
     return;
   }
-  el.innerHTML='';
-  cids.forEach(cid=>{
-    const items=Object.values(pedido[cid]||{});
-    if(!items.length) return;
-    const total=items.reduce((s,i)=>s+i.qty*(i.row.costo||0),0);
-    const card=document.createElement('div');
-    card.className='pedido-cat';
 
-    const hdr=document.createElement('div');
-    hdr.className='pedido-cat-hdr';
-    hdr.innerHTML=`<div class="pedido-cat-name"><i class="ti ti-tag" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>${getCatName(cid)}</div>`;
-    const pdfBtn=document.createElement('button');
-    pdfBtn.className='btn-sm btn-green';
-    pdfBtn.innerHTML='<i class="ti ti-download"></i> PDF';
-    pdfBtn.addEventListener('click',()=>exportPDFCat(cid));
-    hdr.appendChild(pdfBtn);
+  el.innerHTML = '';
+  catIds.forEach(cid => {
+    const varIds = Object.keys(S.pedido[cid]);
+    if (!varIds.length) return;
+
+    // Reconstruir items desde S.items (fuente de verdad)
+    const items = varIds.map(vid => {
+      const data = getVariantData(vid);
+      const qty  = S.pedido[cid][vid];
+      return data ? { ...data, qty } : null;
+    }).filter(Boolean);
+
+    if (!items.length) return;
+
+    const total = items.reduce((s, i) => s + i.qty * (i.costo || 0), 0);
+    const card = document.createElement('div');
+    card.className = 'pedcat';
+
+    // Header
+    const hdr = document.createElement('div');
+    hdr.className = 'pedhdr';
+    hdr.innerHTML = `<div class="pedname"><i class="ti ti-tag" style="font-size:13px;vertical-align:-1px;margin-right:5px"></i>${catName(cid)}</div>`;
+    const pb = document.createElement('button');
+    pb.className = 'btnsm btn-g';
+    pb.innerHTML = '<i class="ti ti-download"></i> PDF';
+    pb.addEventListener('click', () => exportCat(cid));
+    hdr.appendChild(pb);
     card.appendChild(hdr);
 
-    items.forEach(({row:r,qty})=>{
-      const row=document.createElement('div');
-      row.className='pedido-row';
-      row.innerHTML=`
-        <div class="pedido-row-name">${r.nombre}${r.sku?'<br><span style="font-size:10px;color:var(--text3)">'+r.sku+'</span>':''}</div>
-        <div class="pedido-row-qty">
-          <div class="qbtn" style="width:28px;height:28px;font-size:17px" data-dec>−</div>
-          <div class="qty-num" style="min-width:22px;font-size:13px">${qty}</div>
-          <div class="qbtn" style="width:28px;height:28px;font-size:17px" data-inc>+</div>
-          <div class="qbtn" style="width:28px;height:28px;font-size:13px;color:var(--red-text)" data-del><i class="ti ti-trash"></i></div>
+    // Rows
+    items.forEach(item => {
+      const row = document.createElement('div');
+      row.className = 'pedrow';
+      row.innerHTML = `
+        <div class="pedrname">${item.nombre}${item.sku ? '<br><span style="font-size:10px;color:var(--text3)">'+item.sku+'</span>' : ''}</div>
+        <div class="pedqty">
+          <div class="qb" style="width:28px;height:28px;font-size:17px" data-dec>−</div>
+          <div class="qnum" style="min-width:22px;font-size:13px">${item.qty}</div>
+          <div class="qb" style="width:28px;height:28px;font-size:17px" data-inc>+</div>
+          <div class="qb" style="width:28px;height:28px;font-size:13px;color:var(--red-text)" data-del><i class="ti ti-trash"></i></div>
         </div>`;
-      row.querySelector('[data-dec]').addEventListener('click',()=>{setPedidoQty(cid,r,qty-1);renderPedido();});
-      row.querySelector('[data-inc]').addEventListener('click',()=>{setPedidoQty(cid,r,qty+1);renderPedido();});
-      row.querySelector('[data-del]').addEventListener('click',()=>{setPedidoQty(cid,r,0);renderPedido();});
+      row.querySelector('[data-dec]').addEventListener('click', () => {
+        setQty(cid, item.vid, (S.pedido[cid]?.[item.vid] ?? 0) - 1);
+        renderPedido();
+      });
+      row.querySelector('[data-inc]').addEventListener('click', () => {
+        setQty(cid, item.vid, (S.pedido[cid]?.[item.vid] ?? 0) + 1);
+        renderPedido();
+      });
+      row.querySelector('[data-del]').addEventListener('click', () => {
+        setQty(cid, item.vid, 0);
+        renderPedido();
+      });
       card.appendChild(row);
     });
 
-    const tot=document.createElement('div');
-    tot.className='pedido-total';
-    tot.innerHTML=`<span style="color:var(--text2)">Total estimado:</span><strong>${total?'$'+total.toLocaleString('es-AR'):'—'}</strong>`;
+    // Total
+    const tot = document.createElement('div');
+    tot.className = 'pedtot';
+    tot.innerHTML = `<span style="color:var(--text2)">Total estimado:</span><strong>${total ? '$'+total.toLocaleString('es-AR') : '—'}</strong>`;
     card.appendChild(tot);
     el.appendChild(card);
   });
 }
 
-// ── PDF ────────────────────────────────────────────────────────────────
-function pdfHeader(doc,title){
-  doc.setFillColor(24,95,165);doc.rect(0,0,210,26,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(15);doc.setFont('helvetica','bold');doc.text(title,14,15);
-  doc.setFontSize(9);doc.setFont('helvetica','normal');
+// ─────────────────────────────────────────────────────────────────────
+// PDF
+// ─────────────────────────────────────────────────────────────────────
+function pdfHdr(doc, title) {
+  doc.setFillColor(24,95,165); doc.rect(0,0,210,26,'F');
+  doc.setTextColor(255,255,255); doc.setFontSize(15); doc.setFont('helvetica','bold'); doc.text(title,14,15);
+  doc.setFontSize(9); doc.setFont('helvetica','normal');
   doc.text(new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'long',year:'numeric'}),14,22);
   doc.setTextColor(40,40,40);
 }
-function pdfFooter(doc){
-  const n=doc.internal.getNumberOfPages();
-  for(let i=1;i<=n;i++){
-    doc.setPage(i);doc.setFontSize(8);doc.setTextColor(150);
+function pdfFtr(doc) {
+  const n = doc.internal.getNumberOfPages();
+  for (let i=1;i<=n;i++) {
+    doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150);
     doc.line(14,287,196,287);
-    doc.text('Pág. '+i+'/'+n,196,292,{align:'right'});
-    doc.text('Stock & Pedidos',14,292);
+    doc.text('Pág. '+i+'/'+n, 196,292, {align:'right'});
+    doc.text('Stock & Pedidos', 14,292);
   }
 }
-function buildTable(doc,items,y){
-  const total=items.reduce((s,i)=>s+i.qty*(i.row.costo||0),0);
+function buildTable(doc, items, y) {
+  const total = items.reduce((s,i) => s + i.qty*(i.costo||0), 0);
   doc.autoTable({
     head:[['Producto','SKU','Cant.','Precio unit.','Subtotal']],
-    body:items.map(({row:r,qty})=>[
-      r.nombre,r.sku||'—',qty,
-      r.costo?'$'+r.costo.toLocaleString('es-AR'):'—',
-      r.costo?'$'+(qty*r.costo).toLocaleString('es-AR'):'—'
+    body: items.map(i => [
+      i.nombre, i.sku||'—', i.qty,
+      i.costo ? '$'+i.costo.toLocaleString('es-AR') : '—',
+      i.costo ? '$'+(i.qty*i.costo).toLocaleString('es-AR') : '—',
     ]),
-    foot:[['','','','Total:',total?'$'+total.toLocaleString('es-AR'):'—']],
-    startY:y,
+    foot:[['','','','Total:', total ? '$'+total.toLocaleString('es-AR') : '—']],
+    startY: y,
     styles:{fontSize:9,cellPadding:4},
     headStyles:{fillColor:[24,95,165],textColor:255,fontStyle:'bold'},
     footStyles:{fillColor:[230,241,251],textColor:[12,68,124],fontStyle:'bold'},
     alternateRowStyles:{fillColor:[248,248,246]},
-    columnStyles:{2:{halign:'center'},3:{halign:'right'},4:{halign:'right'}}
+    columnStyles:{2:{halign:'center'},3:{halign:'right'},4:{halign:'right'}},
   });
 }
-function exportPDFCat(cid){
-  const items=Object.values(pedido[cid]||{});
-  if(!items.length){alert('Sin productos en este pedido.');return;}
-  const {jsPDF}=window.jspdf;const doc=new jsPDF();
-  pdfHeader(doc,'Pedido — '+getCatName(cid));
-  buildTable(doc,items,32);
-  pdfFooter(doc);
-  doc.save('pedido-'+getCatName(cid).replace(/\s+/g,'-').toLowerCase()+'-'+new Date().toISOString().slice(0,10)+'.pdf');
+
+function exportCat(cid) {
+  const varIds = Object.keys(S.pedido[cid] || {});
+  const items = varIds.map(vid => {
+    const data = getVariantData(vid);
+    return data ? { ...data, qty: S.pedido[cid][vid] } : null;
+  }).filter(Boolean);
+  if (!items.length) { alert('Sin productos.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  pdfHdr(doc, 'Pedido — ' + catName(cid));
+  buildTable(doc, items, 32);
+  pdfFtr(doc);
+  doc.save('pedido-'+catName(cid).replace(/\s+/g,'-').toLowerCase()+'-'+new Date().toISOString().slice(0,10)+'.pdf');
 }
-function exportPDFTodos(){
-  const cids=Object.keys(pedido);
-  if(!cids.length){alert('El pedido está vacío.');return;}
-  const {jsPDF}=window.jspdf;const doc=new jsPDF();let first=true;
-  cids.forEach(cid=>{
-    const items=Object.values(pedido[cid]||{});
-    if(!items.length) return;
-    if(!first) doc.addPage();first=false;
-    pdfHeader(doc,'Pedido — '+getCatName(cid));
-    buildTable(doc,items,32);
+
+function exportTodos() {
+  const cids = Object.keys(S.pedido).filter(c => Object.keys(S.pedido[c]).length);
+  if (!cids.length) { alert('El pedido está vacío.'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let first = true;
+  cids.forEach(cid => {
+    const varIds = Object.keys(S.pedido[cid]);
+    const items = varIds.map(vid => {
+      const data = getVariantData(vid);
+      return data ? { ...data, qty: S.pedido[cid][vid] } : null;
+    }).filter(Boolean);
+    if (!items.length) return;
+    if (!first) doc.addPage();
+    first = false;
+    pdfHdr(doc, 'Pedido — ' + catName(cid));
+    buildTable(doc, items, 32);
   });
-  pdfFooter(doc);
+  pdfFtr(doc);
   doc.save('pedidos-'+new Date().toISOString().slice(0,10)+'.pdf');
 }
 </script>
