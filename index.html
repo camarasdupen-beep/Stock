@@ -117,6 +117,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:va
 .spin{width:22px;height:22px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
 .ss{padding:6px 10px;border:1px solid var(--border2);border-radius:99px;font-size:12px;background:var(--bg2);color:var(--text);font-family:inherit;-webkit-appearance:none;outline:none;max-width:130px}
+
+/* valuación */
+.val-hero{background:var(--blue);color:#fff;padding:22px 18px;margin:12px 14px;border-radius:14px}
+.val-hero-label{font-size:12px;opacity:.8;margin-bottom:4px}
+.val-hero-amount{font-size:32px;font-weight:700;letter-spacing:-.5px}
+.val-hero-sub{font-size:12px;opacity:.75;margin-top:4px}
+.val-cat-row{display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border);gap:12px}
+.val-cat-name{flex:1;font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.val-cat-right{text-align:right;flex-shrink:0}
+.val-cat-amount{font-size:14px;font-weight:700;color:var(--text)}
+.val-cat-sub{font-size:11px;color:var(--text2);margin-top:1px}
+.val-section{padding:10px 16px 4px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+
 .sep{padding:10px 16px 4px;font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;border-top:1px solid var(--border);margin-top:4px}
 </style>
 </head>
@@ -163,6 +176,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:va
   <div class="bn">
     <button class="nb on" id="nb-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
     <button class="nb" id="nb-ventas" onclick="goPage('ventas')"><i class="ti ti-trending-up"></i>Ventas</button>
+    <button class="nb" id="nb-val" onclick="goPage('val')"><i class="ti ti-chart-bar"></i>Valuación</button>
     <button class="nb" id="nb-ped" onclick="goPage('ped')"><i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc1"></span></button>
   </div>
 </div>
@@ -191,6 +205,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:va
   <div class="bn">
     <button class="nb" id="nb2-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
     <button class="nb on" id="nb2-ventas" onclick="goPage('ventas')"><i class="ti ti-trending-up"></i>Ventas</button>
+    <button class="nb" id="nb2-val" onclick="goPage('val')"><i class="ti ti-chart-bar"></i>Valuación</button>
     <button class="nb" id="nb2-ped" onclick="goPage('ped')"><i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc2"></span></button>
   </div>
 </div>
@@ -205,9 +220,26 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:va
   <div class="bn">
     <button class="nb" id="nb3-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
     <button class="nb" id="nb3-ventas" onclick="goPage('ventas')"><i class="ti ti-trending-up"></i>Ventas</button>
+    <button class="nb" id="nb3-val" onclick="goPage('val')"><i class="ti ti-chart-bar"></i>Valuación</button>
     <button class="nb on" id="nb3-ped" onclick="goPage('ped')"><i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc3"></span></button>
   </div>
 </div>
+
+<!-- VALUACIÓN -->
+<div class="page" id="p-val">
+  <div class="tb">
+    <span class="tb-t">Valuación de stock</span>
+    <button class="ib" onclick="renderVal()"><i class="ti ti-refresh"></i></button>
+  </div>
+  <div class="sc" id="val-sc"></div>
+  <div class="bn">
+    <button class="nb" id="nb4-cats" onclick="goPage('cats')"><i class="ti ti-building-store"></i>Proveedores</button>
+    <button class="nb" id="nb4-ventas" onclick="goPage('ventas')"><i class="ti ti-trending-up"></i>Ventas</button>
+    <button class="nb on" id="nb4-val" onclick="goPage('val')"><i class="ti ti-chart-bar"></i>Valuación</button>
+    <button class="nb" id="nb4-ped" onclick="goPage('ped')"><i class="ti ti-shopping-cart"></i>Pedido<span class="cc" id="cc4"></span></button>
+  </div>
+</div>
+
 
 </div>
 <script>
@@ -404,7 +436,7 @@ function totalUnits() { return Object.values(PEDIDO).reduce((s,q) => s+q, 0); }
 
 function updateBadge() {
   const t = totalUnits();
-  ['cc1','cc2','cc3'].forEach(id => {
+  ['cc1','cc2','cc3','cc4'].forEach(id => {
     const el = document.getElementById(id);
     if (!el) return;
     el.textContent = t;
@@ -418,7 +450,7 @@ function updateBadge() {
 function goPage(name) {
   ['cats','prods','ventas','ped'].forEach(n => document.getElementById('p-'+n).classList.remove('on'));
   document.getElementById('p-'+name).classList.add('on');
-  ['nb-cats','nb-ventas','nb-ped','nb2-cats','nb2-ventas','nb2-ped','nb3-cats','nb3-ventas','nb3-ped'].forEach(id => {
+  ['nb-cats','nb-ventas','nb-val','nb-ped','nb2-cats','nb2-ventas','nb2-val','nb2-ped','nb3-cats','nb3-ventas','nb3-val','nb3-ped','nb4-cats','nb4-ventas','nb4-val','nb4-ped'].forEach(id => {
     const el = document.getElementById(id); if (el) el.classList.remove('on');
   });
   ['nb-'+name,'nb2-'+name,'nb3-'+name].forEach(id => {
@@ -427,6 +459,7 @@ function goPage(name) {
   if (name === 'cats')   renderCats();
   if (name === 'prods')  renderProds();
   if (name === 'ventas') renderVentas();
+  if (name === 'val')    renderVal();
   if (name === 'ped')    renderPedido();
 }
 
@@ -630,6 +663,91 @@ function switchVentasTab(tab) {
   document.getElementById('tab-mes').classList.toggle('on', tab === 'mes');
   document.getElementById('tab-hist').classList.toggle('on', tab === 'hist');
   renderVentas();
+}
+
+
+// ══════════════════════════════════════════════════════════════
+// VALUACIÓN
+// ══════════════════════════════════════════════════════════════
+function calcVal() {
+  // Resultado: { total, porCat: { catId: { nombre, valor, unidades, productos } } }
+  let total = 0;
+  const porCat = {};
+
+  const addToCat = (catId, catNombre, valor, unidades) => {
+    if (!porCat[catId]) porCat[catId] = { nombre: catNombre, valor: 0, unidades: 0, productos: 0 };
+    porCat[catId].valor    += valor;
+    porCat[catId].unidades += unidades;
+    porCat[catId].productos++;
+    total += valor;
+  };
+
+  ITEMS.forEach(item => {
+    const catId     = item.category_id || SIN_CAT;
+    const catNombre = item.category_id ? catLabel(item.category_id) : 'Sin proveedor';
+    (item.variants || []).forEach(v => {
+      const vid   = getVarId(v);
+      const stock = INV[vid] ?? 0;
+      const costo = v.cost || 0;
+      if (stock > 0 && costo > 0) {
+        addToCat(catId, catNombre, stock * costo, stock);
+      } else if (stock > 0) {
+        // Tiene stock pero sin costo cargado — contarlo igual
+        addToCat(catId, catNombre, 0, stock);
+      }
+    });
+  });
+
+  return { total, porCat };
+}
+
+function renderVal() {
+  const el = document.getElementById('val-sc');
+  const { total, porCat } = calcVal();
+
+  // Contar productos sin costo
+  let sinCosto = 0;
+  ITEMS.forEach(item => (item.variants||[]).forEach(v => { if ((INV[getVarId(v)]??0) > 0 && !v.cost) sinCosto++; }));
+
+  const totalItems = ITEMS.reduce((s, item) => s + (item.variants||[]).length, 0);
+  const totalUnidadesStock = Object.values(INV).reduce((s, q) => s + Math.max(q, 0), 0);
+
+  el.innerHTML = '';
+
+  // Hero card
+  const hero = document.createElement('div');
+  hero.className = 'val-hero';
+  hero.innerHTML = `
+    <div class="val-hero-label">Valor total del stock (a precio costo)</div>
+    <div class="val-hero-amount">$${Math.round(total).toLocaleString('es-AR')}</div>
+    <div class="val-hero-sub">${totalUnidadesStock} unidades · ${totalItems} variantes${sinCosto ? ' · ⚠ '+sinCosto+' sin costo cargado' : ''}</div>`;
+  el.appendChild(hero);
+
+  // Por categoría — ordenado por valor desc
+  const sec = document.createElement('div');
+  sec.className = 'val-section';
+  sec.textContent = 'Por proveedor';
+  el.appendChild(sec);
+
+  const sorted = Object.entries(porCat).sort((a,b) => b[1].valor - a[1].valor);
+
+  sorted.forEach(([catId, d]) => {
+    const row = document.createElement('div');
+    row.className = 'val-cat-row';
+    const pct = total > 0 ? Math.round((d.valor / total) * 100) : 0;
+    row.innerHTML = `
+      <div style="flex:1;min-width:0">
+        <div class="val-cat-name">${d.nombre}</div>
+        <div style="margin-top:4px;height:3px;background:var(--bg3);border-radius:9px;overflow:hidden">
+          <div style="width:${pct}%;height:100%;background:var(--blue);border-radius:9px"></div>
+        </div>
+      </div>
+      <div class="val-cat-right">
+        <div class="val-cat-amount">${d.valor > 0 ? '$'+Math.round(d.valor).toLocaleString('es-AR') : '—'}</div>
+        <div class="val-cat-sub">${d.unidades} ud · ${pct}%</div>
+      </div>`;
+    el.appendChild(row);
+  });
 }
 
 // ══════════════════════════════════════════════════════════════
